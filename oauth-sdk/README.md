@@ -5,7 +5,7 @@ In this SDK, we demonstrate how to generate **JWT** (JSON Web Token) by generati
 
  - Clone the project into your local machine.
     ```bash
-    git clone https://github.com/SPAN-Enterprises/TaxBandits-SDK.git
+    git clone https://github.com/TaxBandits/nodejs-sdk.git
     ```
  - Let's Navigate into the OAUTH API folder.
  - Open the frontend and backend folder path in a separate integrated terminals, so we can run our frontend and backend in two different ports.

@@ -5,7 +5,7 @@ In this SDK, we demonstrate how to create business, list business and update bus
 
  - Clone the project into your local machine by entering following command in Terminal/Command Prompt.
     ```bash
-    git clone https://github.com/SPAN-Enterprises/TaxBandits-SDK.git
+    git clone https://github.com/TaxBandits/nodejs-sdk.git
     ```
  - Let's Navigate into the business-sdk folder.
  - Open the frontend and backend folder path in a separate integrated terminals, so we can run our frontend and backend in two different ports.

@@ -5,7 +5,7 @@ In this SDK, we demonstrate how to  Request, List, Status and Cancel TIN Matchin
 
  - Clone the project into your local machine.
     ```bash
-    git clone https://github.com/SPAN-Enterprises/TaxBandits-SDK.git
+    git clone https://github.com/TaxBandits/nodejs-sdk.git
     ```
  - Let's Navigate into the sdk-nodejs &rarr; tin-matching-recipients-sdk folder.
  - Open the frontend and backend folder path in a separate integrated terminals, so we can run our frontend and backend in two different ports.
