@@ -5,7 +5,7 @@ In this SDK, we demonstrate how to generate **JWT** (JSON Web Token) by generati
 
  - Clone the project into your local machine.
     ```bash
-    git clone https://github.com/TaxBandits/nodejs-sdk.git
+    git clone https://github.com/TaxBandits/tbs-nodejs-sdk.git
     ```
  - Let's Navigate into the OAUTH API folder.
  - Open the frontend and backend folder path in a separate integrated terminals, so we can run our frontend and backend in two different ports.
@@ -13,7 +13,7 @@ In this SDK, we demonstrate how to generate **JWT** (JSON Web Token) by generati
 ## Dependencies Used
 ### Runtime dependencies
 #### Node JS Application
- - **express** - The server for handling and routing HTTP requests.
+ - **express** - The application framework for building RESTful APIs with Node.js.
  - **dotenv** - It is used to load environment variables.
  - **axios** - This library is used to make HTTP Calls.
  - **jws** - This library used for generating JWT (JSON Web Token).
@@ -122,13 +122,26 @@ Once you obtain the JWT (Access token), you can use the same JWT along with ever
 ## Verify JWT
 - You can verify your JWT is valid by clicking on the Verify JWT button.
 - If there is any business under the User, it will be shown as a list of business by hitting Business/List method.
-**Business/List API URL:** [https://testapi.taxbandits.com/v1.7.3/Business/List] 
+
+    **Business/List API URL:** [https://testapi.taxbandits.com/v1.7.3/Business/List] 
     #### Sample Business List
     ![Business List](./TBS_OAUTH_FRONTEND//public//images//listbusiness.png)
 
 - If there is no business under the User, it shows the response from the list method in Business TBS Public API Base URL.
     #### Sample No Business found
-    ![No Business found](./TBS_OAUTH_FRONTEND//public/images/nobusiness.png)
+    ```json
+    {
+    "StatusCode": 404,
+    "StatusName": "NotFound",
+    "StatusMessage": "The resource you have specified cannot be found",
+    "Businesses": null,
+    "Page": 1,
+    "TotalRecords": 0,
+    "TotalPages": 0,
+    "PageSize": 10,
+    "Errors": null
+    }
+    ```
 
 For more information, please refer: https://developer.taxbandits.com/
 

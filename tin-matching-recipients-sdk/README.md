@@ -5,7 +5,7 @@ In this SDK, we demonstrate how to  Request, List, Status and Cancel TIN Matchin
 
  - Clone the project into your local machine.
     ```bash
-    git clone https://github.com/TaxBandits/nodejs-sdk.git
+    git clone https://github.com/TaxBandits/tbs-nodejs-sdk.git
     ```
  - Let's Navigate into the sdk-nodejs &rarr; tin-matching-recipients-sdk folder.
  - Open the frontend and backend folder path in a separate integrated terminals, so we can run our frontend and backend in two different ports.
@@ -13,7 +13,7 @@ In this SDK, we demonstrate how to  Request, List, Status and Cancel TIN Matchin
 ## Dependencies Used
 ### Runtime dependencies
 #### Node JS Application
- - **express** - The server for handling and routing HTTP requests.
+ - **express** - The application framework for building RESTful APIs with Node.js.
  - **dotenv** - It is used to load environment variables.
  - **axios** - This library is used to make HTTP Calls.
  - **jws** - This library used for generating JWT (JSON Web Token).
