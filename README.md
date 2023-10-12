@@ -10,6 +10,7 @@ Jump To
 - [TIN Matching Recipient SDK](https://github.com/TaxBandits/tbs-nodejs-sdk/tree/main/tin-matching-recipients-sdk)
 - [Form 1099 NEC SDK](https://github.com/TaxBandits/tbs-nodejs-sdk/tree/main/form1099NEC-sdk)
 - [Form 1099 MISC SDK](https://github.com/TaxBandits/tbs-nodejs-sdk/tree/main/form1099MISC-sdk)
+- [Form 1099 K SDK](https://github.com/TaxBandits/tbs-nodejs-sdk/tree/main/form1099K-sdk)
 
 ## Getting Started
 
