@@ -1,6 +1,7 @@
 ## TaxBandits Form 1099-K API SDK
 ## Introduction
 In this SDK, we demonstrate how to ValidateForm, Create, List, Update, Status, Delete, Transmit, RequestPdf, and RequestDraftPdfUrl of Form1099K using TaxBandits API. Here we use React JS as frontend and Node JS as backend.
+
 ## Cloning and Running the Application in local
 - Clone the project into your local machine.
 
