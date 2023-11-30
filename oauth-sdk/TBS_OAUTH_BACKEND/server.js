@@ -7,8 +7,13 @@ dotenv.config(); //dotenv npm package to get and use env
 const port = process.env.PORT; /*Initializing Port */
 const app = express();
 
-app.use(cors())
+ app.use(cors())
 
+// const corsOptions = {
+//     origin: [process.env.FRONTEND_URL],
+//     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204ā
+// }
+// app.use(cors(corsOptions))
 app.use(express.json()); /* Parse the incoming requests with JSON payloads */
 app.use('/user', require('./routes/user/userRoute')); /*User Routes */
 app.use('/business',require('./routes/business/listBusinessRoute')) /*Business Routes */
