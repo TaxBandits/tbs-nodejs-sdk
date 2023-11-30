@@ -12,7 +12,7 @@ In this SDK, we demonstrate how to generate **JWT** (JSON Web Token) by generati
 
 ## Dependencies Used
 ### Runtime dependencies
-#### Node JS Application
+#### Node JS(v20.10.0) Application
  - **express** - The application framework for building RESTful APIs with Node.js.
  - **dotenv** - It is used to load environment variables.
  - **axios** - This library is used to make HTTP Calls.
@@ -52,8 +52,6 @@ In this SDK, we demonstrate how to generate **JWT** (JSON Web Token) by generati
 -   `controllers/`  - This folder is responsible for handling incoming requests and returning responses to the client.
     -   `controllers/user/userControllers.js`  - This file contains a function that defines the JWS and JWT response sent to a client when making a request to the server.
     - `controllers/business/listBusinessController.js`  - This file contains a function that defines the list business response sent to a client when making a request to the server.
--   `utils/`  - This folder contains functions that is used for controllers.
-    -   `utils/unixEpoch.js`  - This file contains function that is used for unixEpoch conversion that is passed as payload for generating JWS key.
 #### React JS Application
 -   `package.json`  - This file stores our application information such as name, version , dependencies and more on. 
 -   `package-lock.json`  - This is a **lockfile** that contains information about the dependencies/packages with their version numbers that were installed for our react.js project.
@@ -99,12 +97,36 @@ I5NjhhOWM3OGRhZTI5YTI5Iiwic3ViIjoiOTY4YTljNzhkYWUyOWEyOSIsImF1
 ZCI6ImE1NzRiNzVmMThiMjRmYzA5ZjkwMzlmZmI1Y2IwOGYzIiwiaWF0IjoxN  
 TE2MjM5MDIyfQ.HNQznxlPyVt62kyUeVwtk1-uzm1uDWH4NBDLShA6Ac0
 ```
+
+## Server Time (Optional)
+
+You can use the GetServerTime endpoint to get the timezone, current date, and time of our server. This helps you make sure that the server time of your application is aligned with our API’s server time.
+
+**Request URL:** http://testoauth.expressauth.net/v2/getservertime
+
+**Header:** Authentication:(JWS)
+
+**Get ServerTime Api Response:**
+
+```json
+{
+    "StatusCode": 200,
+    "StatusName": "Ok",
+    "StatusMessage": "Successful API call",
+    "ServerDate": "10/10/2023",
+    "ServerTime": "06:05:48",
+    "TimeZone": "UTC",
+    "UnixTs": "1696917948",
+    "Errors": null
+}
+```
+
 ## JWT Authentication
 Once the JWS is created, then send a request to the Authentication Server by passing JWS in headers for an generating Access token.
 **Authentication Server URL:** [https://testoauth.expressauth.net/v2/tbsauth]
 ```javascript
 headers: {
-Authentication:signature  // Pass JWS as Authentication in headers
+    Authentication:signature  // Pass JWS as Authentication in headers
 }
 ```
 ### Sample JWT
@@ -121,28 +143,27 @@ Once you obtain the JWT (Access token), you can use the same JWT along with ever
 
 ## Verify JWT
 - You can verify your JWT is valid by clicking on the Verify JWT button.
-- If there is any business under the User, it will be shown as a list of business by hitting Business/List method.
+- Here we are verifying the JWT by using Ping Api
+- This allows you to verify whether the JWT is valid or not and also helps you identify any connectivity issues between your software and our API server before requesting endpoints. 
 
-    **Business/List API URL:** [https://testapi.taxbandits.com/v1.7.3/Business/List] 
-    #### Sample Business List
-    ![Business List](./TBS_OAUTH_FRONTEND//public//images//listbusiness.png)
+**PING API URL:** https://testapi.taxbandits.com/v1.7.3/Utility/Ping 
 
-- If there is no business under the User, it shows the response from the list method in Business TBS Public API Base URL.
-    #### Sample No Business found
-    ```json
-    {
-    "StatusCode": 404,
-    "StatusName": "NotFound",
-    "StatusMessage": "The resource you have specified cannot be found",
-    "Businesses": null,
-    "Page": 1,
-    "TotalRecords": 0,
-    "TotalPages": 0,
-    "PageSize": 10,
+**Header:** Authorization:(JWT)
+
+### Ping Api Response:
+
+```json
+{
+    "StatusCode": 200,
+    "StatusName": "Ok",
+    "StatusMessage": "Successful API call",
+    "APIVersion": "V1.7.3",
+    "JWTExpiry": "1696917733",
+    "TimeZone": "UTC",
     "Errors": null
-    }
-    ```
+}
+```
+ 
+In the above URLs, `{version}` is the endpoint version of TaxBandits API.
 
-For more information, please refer: https://developer.taxbandits.com/
-
-
+For more information, please refer: [https://developer.taxbandits.com/](https://developer.taxbandits.com/)
