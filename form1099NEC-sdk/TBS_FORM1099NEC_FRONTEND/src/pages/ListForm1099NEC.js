@@ -290,7 +290,7 @@ const ListForm1099NEC = () => {
                           <td className='taL'>{form1099NEC?.SubmissionId}</td>
                           <td className='taL'>{form1099NEC?.Recipient?.RecordId}</td>
                           <td className='taL'>{form1099NEC?.Recipient?.RecipientId}</td>
-                          <td className='taL'>{form1099NEC?.Recipient?.RecipientNm}</td>
+                          <td className='taL'>{form1099NEC?.Recipient?.RecipientNm === null ?form1099NEC?.Recipient?.FirstNm :form1099NEC?.Recipient?.RecipientNm }</td>
                           <td className='text-center'>
                             <div
                               className="dropdown dropdown-scroll action d-md-flex justify-content-between align-items-center px-4">

@@ -885,3 +885,16 @@ export const CorporationBusinessMembers = {
     2: 'VICE PRESIDENT',
     3: 'TREASURER'
 }
+
+export const suffix ={
+    0:'Suffix',
+    1:'Jr',
+    2:"Sr",
+    3:"I",
+    4:"II",
+    5:"III",
+    6:"IV",
+    7:"V",
+    8:"VI",
+    9:"VII",
+}

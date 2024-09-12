@@ -4,7 +4,7 @@ import * as bootstrap from 'bootstrap/dist/js/bootstrap' // Importing bootstrap 
 import axios from 'axios' // Importing Axios to make HTTP calls.
 import logo from '../images/tbsLogo.png' // Importing Images
 import {useNavigate,useParams} from 'react-router-dom'
-import {countries, states, statesShort, countryShorts, businessType, businessTypeShorts, EstateBusinessMembers, PartnershipBusinessMembers, SoleProprietorshipBusinessMembers, ExemptOrganizationBusinessMembers, CorporationBusinessMembers, kindOfEmployer, kindOfPayer} from '../utils/constants' // Importing static values from utils
+import {countries, suffix, states, statesShort, countryShorts, businessType, businessTypeShorts, EstateBusinessMembers, PartnershipBusinessMembers, SoleProprietorshipBusinessMembers, ExemptOrganizationBusinessMembers, CorporationBusinessMembers, kindOfEmployer, kindOfPayer} from '../utils/constants' // Importing static values from utils
 import ErrorModal from '../components/ErrorModal' // Importing Error Modal
 import SuccessModal from '../components/SuccessModal' // Importing Success Modal
 import Spinner from '../components/Spinner'
@@ -36,6 +36,10 @@ const UpdateBusiness = () => {
     const [editBusinessDetails,setEditBusinessDetails] = useState({
         BusinessId : "",
         BusinessName : "",
+        FirstNm:"",
+        MiddleNm:"",
+        LastNm:"",
+        Suffix:"",
         PayerRef : "",
         TradeName : "",
         EINOrSSN : "",
@@ -116,6 +120,16 @@ const UpdateBusiness = () => {
       })
     }
 
+     // Storing key values of suffix into new array for Dropdown
+     const suffixOptions = []
+     for (const key in suffix) {
+         suffixOptions.push({
+             value: suffix[key],
+             label: suffix[key],
+             key: key,
+         })
+     }
+
     // To get business by Id by requesting get business API
     const getBusinessById = async (businessId) =>{
         try {
@@ -128,6 +142,10 @@ const UpdateBusiness = () => {
                 setEditBusinessDetails({
                     BusinessId: businessDetails?.BusinessId,
                     BusinessName: businessDetails?.BusinessNm,
+                    FirstNm: businessDetails?.FirstNm,
+                    MiddleNm: businessDetails?.MiddleNm,
+                    LastNm: businessDetails?.LastNm,
+                    Suffix: businessDetails?.Suffix,
                     PayerRef: businessDetails?.PayerRef,
                     TradeName: businessDetails?.TradeNm,
                     EINOrSSN: businessDetails?.EINorSSN,
@@ -212,9 +230,14 @@ const UpdateBusiness = () => {
         e.preventDefault()
 
         try {
+            setLoading(true)
             const requestData = {
                 BusinessId: editBusinessDetails?.BusinessId,
                 BusinessNm: editBusinessDetails?.BusinessName,
+                FirstNm: editBusinessDetails?.FirstNm,
+                MiddleNm: editBusinessDetails?.MiddleNm,
+                LastNm: editBusinessDetails?.LastNm,
+                Suffix: editBusinessDetails?.Suffix,
                 PayerRef: editBusinessDetails?.PayerRef,
                 TradeNm: editBusinessDetails?.TradeName,
                 EINorSSN: editBusinessDetails?.EINOrSSN,
@@ -235,19 +258,19 @@ const UpdateBusiness = () => {
                 KindOfPayer: editBusinessDetails?.KindOfPayer,
                 IsForeign: editBusinessDetails?.IsForeign,
                 USAddress: {
-                    Address1: editBusinessDetails.IsForeign === false ? editBusinessDetails?.Address1 : "",
-                    Address2: editBusinessDetails.IsForeign === false ? editBusinessDetails?.Address2 : "",
-                    City: editBusinessDetails.IsForeign === false ? editBusinessDetails?.City : "",
-                    State: editBusinessDetails.IsForeign === false ? editBusinessDetails?.State : "",
-                    ZipCd: editBusinessDetails.IsForeign === false ? editBusinessDetails?.ZipCode : "",
+                    Address1: !editBusinessDetails?.IsForeign ? editBusinessDetails?.Address1 : "",
+                    Address2: !editBusinessDetails?.IsForeign ? editBusinessDetails?.Address2 : "",
+                    City: !editBusinessDetails?.IsForeign ? editBusinessDetails?.City : "",
+                    State: !editBusinessDetails?.IsForeign ? editBusinessDetails?.State : "",
+                    ZipCd: !editBusinessDetails?.IsForeign ? editBusinessDetails?.ZipCode : "",
                 },
                 ForeignAddress: {
-                    Address1: editBusinessDetails.IsForeign === true ? editBusinessDetails?.Address1 : "",
-                    Address2: editBusinessDetails.IsForeign === true ? editBusinessDetails?.Address2 : "",
-                    City: editBusinessDetails.IsForeign === true ? editBusinessDetails?.City : "",
-                    ProvinceOrStateNm: editBusinessDetails.IsForeign === true ? editBusinessDetails?.ProvinceOrStateNm : "",
-                    Country: editBusinessDetails.IsForeign === true ? editBusinessDetails?.Country : "",
-                    PostalCd: editBusinessDetails.IsForeign === true ? editBusinessDetails?.PostalCode : "",
+                    Address1: editBusinessDetails?.IsForeign ? editBusinessDetails?.Address1 : "",
+                    Address2: editBusinessDetails?.IsForeign ? editBusinessDetails?.Address2 : "",
+                    City: editBusinessDetails?.IsForeign ? editBusinessDetails?.City : "",
+                    ProvinceOrStateNm: editBusinessDetails?.IsForeign ? editBusinessDetails?.ProvinceOrStateNm : "",
+                    Country: editBusinessDetails?.IsForeign ? editBusinessDetails?.Country : "",
+                    PostalCd: editBusinessDetails?.IsForeign ? editBusinessDetails?.PostalCode : "",
                 }
             }
 
@@ -281,6 +304,7 @@ const UpdateBusiness = () => {
             let awaitingModal = new bootstrap.Modal(document.getElementById('errorModal'))
             awaitingModal.show()
         }
+        setLoading(false)
     }
 
     // Handle onchange for input values
@@ -288,19 +312,19 @@ const UpdateBusiness = () => {
         const { name, value, checked } = e.target
 
         if (name === "IsEIN" || name === "IsBusinessTerminated") {
-            if (checked === true) {
+            if (checked) {
                 setEditBusinessDetails({
                     ...editBusinessDetails,
                     [name]: checked
                 })
-            } else if (checked === false) {
+            } else if (!checked) {
                 setEditBusinessDetails({
                     ...editBusinessDetails,
                     [name]: checked
                 })
             }
         } else if (name === "IsForeign") {
-            if (checked === true) {
+            if (checked) {
                 setEditBusinessDetails({
                     ...editBusinessDetails,
                     Address1: "",
@@ -311,7 +335,7 @@ const UpdateBusiness = () => {
                     Country: "",
                     [name]: checked
                 })
-            } else if (checked === false) {
+            } else if (!checked) {
                 setEditBusinessDetails({
                     ...editBusinessDetails,
                     Address1: "",
@@ -388,14 +412,14 @@ const UpdateBusiness = () => {
             })
         }
     }
-    console.log("editbusinessDetails",editBusinessDetails);
+
     return (
         <>
             <div className="header text-center mt-3 mb-3">
                 <img src={logo} alt="tbsLogo" />
             </div>
             {/*Checks loader state and displays spinner component*/}
-            {loading === true &&
+            {loading  &&
                 <div className='mt-3'>
                     <Spinner />
                 </div>
@@ -409,7 +433,7 @@ const UpdateBusiness = () => {
                             <div className="row d-flex justify-content-center mb-15px">
                                 <div className="col-md-5">
                                     <div className="labelName">
-                                        <label className="control-label"><span className="text-danger">*</span>Business Name:</label>
+                                        <label className="control-label"><span className="text-danger"></span>Business Name:</label>
                                         <input type="text" className='form-control' name='BusinessName' value={editBusinessDetails.BusinessName} onChange={(e) => { handleChangeValidation(e) }} />
                                     </div>
                                 </div>
@@ -417,6 +441,40 @@ const UpdateBusiness = () => {
                                     <div className="labelName">
                                         <label className="control-label"><span className="text-danger"></span>Payer Ref:</label>
                                         <input type="text" className='form-control' name='PayerRef' value={editBusinessDetails.PayerRef} onChange={(e) => { handleChangeValidation(e) }} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row d-flex justify-content-center mb-15px">
+                                <div className="col-md-5">
+                                    <div className="labelName">
+                                        <label className="control-label"><span className="text-danger"></span>First Name:</label>
+                                        <input type="text" className='form-control' name='FirstNm' value={editBusinessDetails?.FirstNm} onChange={(e) => { handleChangeValidation(e) }} />
+                                    </div>
+                                </div>
+                                <div className="col-md-5">
+                                    <div className="labelName">
+                                        <label className="control-label"><span className="text-danger"></span> Middle Name:</label>
+                                        <input type="text" className='form-control' name='MiddleNm' value={editBusinessDetails?.MiddleNm} onChange={(e) => { handleChangeValidation(e) }} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row d-flex justify-content-center mb-15px">
+                                <div className="col-md-5">
+                                    <div className="labelName">
+                                        <label className="control-label"><span className="text-danger"></span>Last Name:</label>
+                                        <input type="text" className='form-control' name='LastNm' value={editBusinessDetails?.LastNm} onChange={(e) => { handleChangeValidation(e) }} />
+                                    </div>
+                                </div>
+                                <div className="col-md-5">
+                                    <div className="labelName">
+                                        <label className="control-label"><span className="text-danger"></span>Suffix:</label>
+                                        <select className='form-control form-select' name='Suffix' value={editBusinessDetails?.Suffix} onChange={(e) => { handleChangeValidation(e) }}  >
+                                        {suffixOptions?.map((suffixOption, index) => {
+                                          return <option key={suffixOption.key} selected={suffixOption.value == editBusinessDetails.Suffix ? `selected` : ``} value={suffixOption.label}>
+                                            {suffixOption?.label}
+                                          </option>
+                                        })}
+                                       </select>
                                     </div>
                                 </div>
                             </div>
@@ -431,7 +489,7 @@ const UpdateBusiness = () => {
                                 </div>
                                 <div className="col-md-5">
                                     <div className="labelName">
-                                        <label className="control-label"><span className="text-danger">*</span>EIN or SSN:</label>
+                                        <label className="control-label"><span className="text-danger"></span>EIN or SSN:</label>
                                         <span className='m-3'><input className="form-check-input cursor-pointer" type="checkbox" name='IsEIN' value={editBusinessDetails?.IsEIN} onClick={(e) => { handleChangeValidation(e) }} checked={editBusinessDetails?.IsEIN} /> Is EIN?</span>
                                         <input type="text" className='form-control' name='EINOrSSN' maxLength="11" value={editBusinessDetails.EINOrSSN} onChange={(e) => { handleChangeValidation(e) }} />
                                     </div>
@@ -441,7 +499,7 @@ const UpdateBusiness = () => {
                             <div className="row d-flex justify-content-center mb-15px">
                                 <div className="col-md-5">
                                     <div className="labelName">
-                                        <label className="control-label"><span className="text-danger">*</span>Email Address:</label>
+                                        <label className="control-label"><span className="text-danger"></span>Email Address:</label>
                                         <input type="text" className='form-control' name='EmailAddress' value={editBusinessDetails.EmailAddress} onChange={(e) => { handleChangeValidation(e) }} />
 
                                     </div>
@@ -457,7 +515,7 @@ const UpdateBusiness = () => {
                             <div className="row d-flex justify-content-center mb-15px">
                                 <div className="col-md-5">
                                     <div className="labelName">
-                                        <label className="control-label"><span className="text-danger">*</span>Phone:</label>
+                                        <label className="control-label"><span className="text-danger"></span>Phone:</label>
                                         <input type="text" className='form-control' name='Phone' maxLength="10" value={editBusinessDetails.Phone} onChange={(e) => { handleChangeValidation(e) }} />
 
                                     </div>
@@ -537,7 +595,7 @@ const UpdateBusiness = () => {
                                     </div>
                                 </div>
                             </div>
-                            {editBusinessDetails.IsForeign == true ?
+                            {editBusinessDetails.IsForeign ?
                                 <>
                                     <div className="row d-flex justify-content-center mb-15px">
                                         <div className="col-md-5">
@@ -556,7 +614,7 @@ const UpdateBusiness = () => {
                                         <div className="col-md-5">
                                             <span><input className="form-check-input cursor-pointer" type="checkbox" name='IsForeign' style={{ marginLeft: "10px" }} onClick={(e) => { handleChangeValidation(e) }} checked={editBusinessDetails.IsForeign} /> Is Foreign?</span>
                                             <div className="labelName">
-                                                <label className="control-label"><span className="text-danger">*</span>Address 1:</label>
+                                                <label className="control-label"><span className="text-danger"></span>Address 1:</label>
                                                 <input type="text" className='form-control' name='Address1' value={editBusinessDetails.Address1} onChange={(e) => { handleChangeValidation(e) }} />
                                             </div>
                                         </div>
@@ -571,7 +629,7 @@ const UpdateBusiness = () => {
                                         </div>
                                         <div className="col-md-5">
                                             <div className="labelName">
-                                                <label className="control-label"><span className="text-danger">*</span>City:</label>
+                                                <label className="control-label"><span className="text-danger"></span>City:</label>
                                                 <input type="text" className='form-control' name='City' value={editBusinessDetails.City} onChange={(e) => { handleChangeValidation(e) }} />
                                             </div>
                                         </div>
@@ -580,7 +638,7 @@ const UpdateBusiness = () => {
                                     <div className="row d-flex justify-content-center mb-15px">
                                         <div className="col-md-5">
                                             <div className="labelName">
-                                                <label className="control-label"><span className="text-danger">*</span>Country:</label>
+                                                <label className="control-label"><span className="text-danger"></span>Country:</label>
                                                 <select className="form-control form-select" name='Country' onChange={(e) => { handleChangeValidation(e) }}>
                                                     {countriesOptions.map((countryOption, index) => {
                                                         return <option key={index} selected={countryOption.code === editBusinessDetails.Country ? `selected` : ``} value={countryOption.key}>
@@ -593,7 +651,7 @@ const UpdateBusiness = () => {
                                         </div>
                                         <div className="col-md-5">
                                             <div className="labelName">
-                                                <label className="control-label"><span className="text-danger">*</span>ProvinceOrStateNm:</label>
+                                                <label className="control-label"><span className="text-danger"></span>ProvinceOrStateNm:</label>
                                                 <input type="text" className='form-control' name='ProvinceOrStateNm' value={editBusinessDetails.ProvinceOrStateNm} onChange={(e) => { handleChangeValidation(e) }} />
 
                                             </div>
@@ -603,7 +661,7 @@ const UpdateBusiness = () => {
                                     <div className="row d-flex justify-content-center mb-15px">
                                         <div className="col-md-5">
                                             <div className="labelName">
-                                                <label className="control-label"><span className="text-danger">*</span>Postal Code:</label>
+                                                <label className="control-label"><span className="text-danger"></span>Postal Code:</label>
                                                 <input type="text" className='form-control' name='PostalCode' value={editBusinessDetails.PostalCode} onChange={(e) => { handleChangeValidation(e) }} />
                                             </div>
                                         </div>
@@ -630,7 +688,7 @@ const UpdateBusiness = () => {
                                         <div className="col-md-5">
                                             <span><input className="form-check-input cursor-pointer" type="checkbox" name='IsForeign' style={{ marginLeft: "10px" }} onClick={(e) => { handleChangeValidation(e) }} checked={editBusinessDetails.IsForeign} /> Is Foreign?</span>
                                             <div className="labelName">
-                                                <label className="control-label"><span className="text-danger">*</span>Address 1:</label>
+                                                <label className="control-label"><span className="text-danger"></span>Address 1:</label>
                                                 <input type="text" className='form-control' name='Address1' value={editBusinessDetails.Address1} onChange={(e) => { handleChangeValidation(e) }} />
                                             </div>
                                         </div>
@@ -645,7 +703,7 @@ const UpdateBusiness = () => {
                                         </div>
                                         <div className="col-md-5">
                                             <div className="labelName">
-                                                <label className="control-label"><span className="text-danger">*</span>City:</label>
+                                                <label className="control-label"><span className="text-danger"></span>City:</label>
                                                 <input type="text" className='form-control' name='City' value={editBusinessDetails.City} onChange={(e) => { handleChangeValidation(e) }} />
                                             </div>
                                         </div>
@@ -654,7 +712,7 @@ const UpdateBusiness = () => {
                                     <div className="row d-flex justify-content-center mb-15px">
                                         <div className="col-md-5">
                                             <div className="labelName">
-                                                <label className="control-label"><span className="text-danger">*</span>State:</label>
+                                                <label className="control-label"><span className="text-danger"></span>State:</label>
                                                 <select className="form-control form-select" name='State' onChange={(e) => { handleChangeValidation(e) }}>
                                                     {statesOptions.map((stateOption, index) => {
                                                         return <option key={index} selected={stateOption.code === editBusinessDetails.State ? `selected` : ``} value={stateOption.key}>
@@ -666,7 +724,7 @@ const UpdateBusiness = () => {
                                         </div>
                                         <div className="col-md-5">
                                             <div className="labelName">
-                                                <label className="control-label"><span className="text-danger">*</span>Zip Code:</label>
+                                                <label className="control-label"><span className="text-danger"></span>Zip Code:</label>
                                                 <input type="text" className='form-control' name='ZipCode' value={editBusinessDetails.ZipCode} onChange={(e) => { handleChangeValidation(e) }} />
                                             </div>
                                         </div>
@@ -690,7 +748,7 @@ const UpdateBusiness = () => {
                         </form>
 
                     </div>
-                    <button className='btn  btn_cancel  mb-3' onClick={navigateToList} >Back</button>
+                    <button className='btn_back mt-3 mb-3' onClick={navigateToList} >Back</button>
                 </div>
             </div>
 

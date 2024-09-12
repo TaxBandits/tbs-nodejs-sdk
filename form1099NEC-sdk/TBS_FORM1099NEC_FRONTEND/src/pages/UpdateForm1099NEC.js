@@ -5,7 +5,7 @@ import * as bootstrap from 'bootstrap/dist/js/bootstrap'
 import axios from 'axios' // Importing Axios to make HTTP calls.
 import logo from '../images/tbsLogo.png' // Importing Images
 import Spinner from '../components/Spinner' // Importing spinner for loader
-import { month, paymentMethod, overPaymentType, bankAccountType, states, countries, businessType, businessTypeShorts, statesShort, countryShorts, kindOfEmployer, kindOfPayer } from '../utils/constants' // Importing static values from utils
+import { month, paymentMethod, suffix, overPaymentType, bankAccountType, states, countries, businessType, businessTypeShorts, statesShort, countryShorts, kindOfEmployer, kindOfPayer } from '../utils/constants' // Importing static values from utils
 import SuccessModal from '../components/SuccessModal' // Importing Success Modal
 import ErrorModal from '../components/ErrorModal'  // Importing Error Modal
 import ReconStateAL from '../components/ReconStateAL' //Importing Recon State AL
@@ -29,6 +29,9 @@ const UpdateForm1099NEC = () => {
     const [status, setStatus] = useState('') // Initializing state for success modal status
     const [inputData, setInputData] = useState([]) // Initializing state for IncomeTaxWHAndRemitt input data
 
+
+    // Initializing state for count length for IncomeTaxWHAndRemittValues data
+    const [countLength, setCountLength] = useState(0)
     // Initializing state for TIN Type selection
     const [selectedOption, setSelectedOption] = useState({
         TINType: ""
@@ -38,6 +41,10 @@ const UpdateForm1099NEC = () => {
     const [editBusinessDetails, setEditBusinessDetails] = useState({
         BusinessId: "",
         BusinessName: "",
+        FirstNm :"",
+        LastNm :"",
+        MiddleNm :"",
+        Suffix :"",
         TradeName: "",
         EINOrSSN: "",
         IsEIN: false,
@@ -67,11 +74,18 @@ const UpdateForm1099NEC = () => {
 
     //Initializing state for recipient details
     const [editRecipientInformation, setEditRecipientInformation] = useState({
+        IsOnlineAccess:false,
+        IsPostal:false,
+        IsForced:false,
         SequenceId: "",
         TINType: "",
         TIN: "",
         FirstPayeeNm: "",
         SecondPayeeNm: "",
+        FirstNm :"",
+        LastNm :"",
+        MiddleNm :"",
+        Suffix :"",
         IsForeign: false,
         Address1: "",
         Address2: "",
@@ -229,8 +243,8 @@ const UpdateForm1099NEC = () => {
 
     // Storing key values of bank account type  into new array
     const bankAccountTypeOptions = []
-    for (const key in bankAccountType) {
-        bankAccountTypeOptions.push({
+    for (const key in bankAccountType){
+        bankAccountTypeOptions.push({ 
             value: bankAccountType[key],
             label: bankAccountType[key],
             key: key,
@@ -247,9 +261,54 @@ const UpdateForm1099NEC = () => {
         })
     }
 
+    // Storing key values of suffix into new array for Dropdown
+    const suffixOptions = []
+    for (const key in suffix) {
+        suffixOptions.push({
+            value: suffix[key],
+            label: suffix[key],
+            key: key,
+        })
+    }
+
+       // Initializing state for IncomeTaxWHAndRemitt input fields
+  const [editInputFields, setEditInputFields] = useState([{
+    Month: "",
+    TaxWH: 0,
+    TaxRemitt: 0
+  }])
+
+//   setInputData(inputFields)
+
+  // Function to handle add IncomeTaxWHAndRemitt input fields
+  const addInputField = () => {
+    setCountLength(countLength + 1)
+    setEditInputFields([...editInputFields, {
+      Month: "",
+      TaxWH: 0,
+      TaxRemitt: 0
+    }])
+  }
+ 
+  //Function to handle remove IncomeTaxWHAndRemitt input fields
+  const removeInputFields = (index) => {
+    setCountLength(countLength - 1)
+    const rows = [...editInputFields]
+    rows.splice(index, 1)
+    setEditInputFields(rows)
+  }
+
+  //Handle onchange function for input values
+  const handleChange = (index, e) => {
+    const { name, value } = e.target;
+    const list = [...editInputFields]
+    list[index][name] = value
+    setEditInputFields(list)
+  }
+//   console.log(editInputFields,"editInputFields");
     //Defining function for IncomeTaxWHAndRemitt input data
     const handleInputData = () => {
-        const incomeTaxData = inputData?.map((data) => {
+        const incomeTaxData = editInputFields?.map((data) => {
             return {
                 Month: data?.Month === "MONTH" ? "" : data?.Month,
                 TaxWH: data?.TaxWH === "" ? 0 : parseInt(data?.TaxWH),
@@ -258,7 +317,7 @@ const UpdateForm1099NEC = () => {
         })
         return incomeTaxData
     }
-
+    console.log("editInputFields",editInputFields);
     // To get Form1099NEC by Id by requesting Get Form1099NEC API
     const getForm1099ById = async () => {
         try {
@@ -268,6 +327,9 @@ const UpdateForm1099NEC = () => {
                 const businessDetails = getForm1099NECResponse?.data?.Form1099Records?.ReturnHeader?.Business
                 const submissionManifest = getForm1099NECResponse?.data?.Form1099Records?.SubmissionManifest
                 const sequenceId = getForm1099NECResponse?.data?.Form1099Records?.ReturnData[0]?.SequenceId
+                const IsOnlineAccess = getForm1099NECResponse?.data?.Form1099Records?.ReturnData[0]?.IsOnlineAccess
+                const IsPostal=getForm1099NECResponse?.data?.Form1099Records?.ReturnData[0]?.IsPostal
+                const IsForced=getForm1099NECResponse?.data?.Form1099Records?.ReturnData[0]?.IsForced
                 const recordId = getForm1099NECResponse?.data?.Form1099Records?.ReturnData[0]?.RecordId
                 const recipientId = getForm1099NECResponse?.data?.Form1099Records?.ReturnData[0]?.Recipient?.RecipientId
                 const recipientDetails = getForm1099NECResponse?.data?.Form1099Records?.ReturnData[0]?.Recipient
@@ -279,6 +341,10 @@ const UpdateForm1099NEC = () => {
                 setEditBusinessDetails({
                     BusinessId: businessDetails?.BusinessId,
                     BusinessName: businessDetails?.BusinessNm,
+                    FirstNm :businessDetails?.FirstNm,
+                    LastNm :businessDetails?.LastNm,
+                    MiddleNm :businessDetails?.MiddleNm,
+                    Suffix :businessDetails?.Suffix,
                     PayerRef: businessDetails?.PayerRef,
                     TradeName: businessDetails?.TradeNm,
                     EINOrSSN: businessDetails?.EINorSSN,
@@ -318,6 +384,9 @@ const UpdateForm1099NEC = () => {
                 })
 
                 setEditRecipientInformation({
+                    IsOnlineAccess:IsOnlineAccess,
+                    IsPostal:IsPostal,
+                    IsForced:IsForced,
                     SequenceId: sequenceId,
                     RecordId: recordId,
                     RecipientId: recipientId,
@@ -325,6 +394,10 @@ const UpdateForm1099NEC = () => {
                     TINType: recipientDetails?.TINType,
                     FirstPayeeNm: recipientDetails?.FirstPayeeNm,
                     SecondPayeeNm: recipientDetails?.SecondPayeeNm,
+                    FirstNm :recipientDetails?.FirstNm,
+                    LastNm :recipientDetails?.LastNm,
+                    MiddleNm :recipientDetails?.MiddleNm,
+                    Suffix :recipientDetails?.Suffix,
                     IsForeign: recipientDetails?.IsForeign,
                     Address1: recipientDetails?.IsForeign ? recipientDetails?.ForeignAddress?.Address1 : recipientDetails?.USAddress?.Address1,
                     Address2: recipientDetails?.IsForeign ? recipientDetails?.ForeignAddress?.Address2 : recipientDetails?.USAddress?.Address2,
@@ -392,7 +465,7 @@ const UpdateForm1099NEC = () => {
                     TotalForYear: stateReconData !== null && stateReconData?.WV !== null ? parseInt(stateReconData?.WV?.FormIT103?.WHTaxDue?.TotalForYear) : 0
 
                 })
-
+                setEditInputFields(incomeTaxWHAndRemitt)
                 setSelectedOption({
                     TINType: recipientDetails?.TINType
                 })
@@ -489,6 +562,10 @@ const UpdateForm1099NEC = () => {
                 ReturnHeader: {
                     Business: {
                         BusinessNm: editBusinessDetails?.BusinessName,
+                        FirstNm :editBusinessDetails?.FirstNm,
+                        LastNm :editBusinessDetails?.LastNm,
+                        MiddleNm :editBusinessDetails?.MiddleNm,
+                        Suffix :editBusinessDetails?.Suffix,
                         PayerRef: editBusinessDetails?.PayerRef,
                         TradeNm: editBusinessDetails?.TradeName,
                         EINorSSN: editBusinessDetails?.EINOrSSN,
@@ -525,6 +602,9 @@ const UpdateForm1099NEC = () => {
                     }
                 },
                 ReturnData: [{
+                    IsOnlineAccess:editRecipientInformation?.IsOnlineAccess,
+                    IsPostal:editRecipientInformation?.IsPostal,
+                    IsForced:editRecipientInformation?.IsForced,
                     RecordId: editRecipientInformation?.RecordId,
                     SequenceId: editRecipientInformation?.SequenceId,
                     Recipient: {
@@ -533,6 +613,10 @@ const UpdateForm1099NEC = () => {
                         TIN: editRecipientInformation?.TIN,
                         FirstPayeeNm: editRecipientInformation?.FirstPayeeNm,
                         SecondPayeeNm: editRecipientInformation?.SecondPayeeNm,
+                        FirstNm:editRecipientInformation?.FirstNm,
+                        LastNm:editRecipientInformation?.LastNm,
+                        MiddleNm:editRecipientInformation?.MiddleNm,
+                        Suffix:editRecipientInformation?.Suffix,
                         IsForeign: editRecipientInformation?.IsForeign,
                         USAddress: {
                             Address1: !editRecipientInformation.IsForeign ? editRecipientInformation?.Address1 : "",
@@ -613,7 +697,7 @@ const UpdateForm1099NEC = () => {
     const handleRecipientInfo = (e) => {
         const { name, value, checked } = e.target
 
-        if (name === "IsForeign" || name === "TINType") {
+        if (name === "IsForeign" || name === "TINType" ||name === "IsOnlineAccess" || name=== "IsPostal" || name=== "IsForced") {
             if (checked) {
                 setEditRecipientInformation({
                     ...editRecipientInformation,
@@ -655,6 +739,7 @@ const UpdateForm1099NEC = () => {
     // Handle onchange for Recon State AL
     const handleEditReconStateAL = (e) => {
         const { name, checked, value } = e.target
+        console.log(editInputFields, "editInputFields");
         if (name === "IsInternationalACHTxn") {
             setEditReconStateAL({
                 ...editReconStateAL,
@@ -750,7 +835,24 @@ const UpdateForm1099NEC = () => {
                                 </div>
                                 <div className="row">
                                     <h5 className="sub-head text-left mt-4 mb-3 " style={{ fontWeight: 'bold' }}>Recipient Details</h5>
+                                    <div className="row d-flex justify-content-center mb-15px">
+                                    <div className='col md-3 d-flex' style={{'justify-content': 'space-evenly'}}>
+                                        <div>
+                                            <input className="me-1 form-check-input cursor-pointer" type="checkbox" name='IsPostal' onClick={(e) => { handleRecipientInfo(e) }} checked={editRecipientInformation?.IsPostal} /><span className="me-3">IsPostal</span>
+                                        </div>
+                                        <div>
 
+                                            <input className="me-1 form-check-input cursor-pointer" type="checkbox" name='IsOnlineAccess' onClick={(e) => { handleRecipientInfo(e) }} checked={editRecipientInformation?.IsOnlineAccess} /><span className="me-3">IsOnlineAccess</span>
+                                        </div>
+                                        <div>
+                                            <input className="me-1 form-check-input cursor-pointer" type="checkbox" name='IsForced' onClick={(e) => { handleRecipientInfo(e) }} checked={editRecipientInformation?.IsForced} /><span className="me-3">IsForced</span>
+                                        </div>
+                                       
+                                    </div>
+                                    <div className="col-md-6">
+
+                                   </div>
+                                </div>
                                     <div className="row d-flex justify-content-center mb-15px">
                                         <div className="col-md-6">
                                             <div className="labelName">
@@ -780,7 +882,9 @@ const UpdateForm1099NEC = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="row d-flex justify-content-center mb-15px">
+                                    {selectedOption?.TINType === "EIN" ?
+                                    <>
+                                     <div className="row d-flex justify-content-center mb-15px">
                                         <div className="col-md-6">
                                             <div className="labelName">
                                                 <label className="control-label"><span className="text-danger">*</span>TIN:</label>
@@ -789,7 +893,7 @@ const UpdateForm1099NEC = () => {
                                         </div>
                                         <div className="col-md-6">
                                             <div className="labelName">
-                                                <label className="control-label"><span className="text-danger">*</span>First Name:</label>
+                                                <label className="control-label"><span className="text-danger">*</span>First PayeeName:</label>
                                                 <input type="text" className='form-control' name='FirstPayeeNm' value={editRecipientInformation?.FirstPayeeNm} onChange={(e) => { handleRecipientInfo(e) }} />
                                             </div>
                                         </div>
@@ -807,7 +911,7 @@ const UpdateForm1099NEC = () => {
                                             <div className="row d-flex justify-content-center mb-15px">
                                                 <div className="col-md-6">
                                                     <div className="labelName">
-                                                        <label className="control-label"><span className="text-danger"></span>Last Name:</label>
+                                                        <label className="control-label"><span className="text-danger"></span>Second PayeeName:</label>
                                                         <input type="text" className='form-control' name='SecondPayeeNm' value={editRecipientInformation?.SecondPayeeNm} onChange={(e) => { handleRecipientInfo(e) }} />
                                                     </div>
                                                 </div>
@@ -890,7 +994,7 @@ const UpdateForm1099NEC = () => {
                                             <div className="row d-flex justify-content-center mb-15px">
                                                 <div className="col-md-6">
                                                     <div className="labelName">
-                                                        <label className="control-label"><span className="text-danger"></span>Last Name:</label>
+                                                        <label className="control-label"><span className="text-danger"></span>Second PayeeName:</label>
                                                         <input type="text" className='form-control' name='SecondPayeeNm' value={editRecipientInformation?.SecondPayeeNm} onChange={(e) => { handleRecipientInfo(e) }} />
                                                     </div>
                                                 </div>
@@ -964,6 +1068,222 @@ const UpdateForm1099NEC = () => {
                                             </div>
                                         </>
                                     }
+                                    
+                                    </>:
+                                    <>
+                                    <div className="row d-flex justify-content-center mb-15px">
+                                        <div className="col-md-6">
+                                            <div className="labelName">
+                                                <label className="control-label"><span className="text-danger">*</span>TIN:</label>
+                                                <input type="text" className='form-control' name='TIN' value={editRecipientInformation?.TIN} maxLength="9" onChange={(e) => { handleRecipientInfo(e) }} />
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="labelName">
+                                                <label className="control-label"><span className="text-danger">*</span>First Name:</label>
+                                                <input type="text" className='form-control' name='FirstNm' value={editRecipientInformation?.FirstNm} onChange={(e) => { handleRecipientInfo(e) }} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row d-flex justify-content-center mb-15px">
+                                        <div className="col-md-6">
+                                            <div className="labelName">
+                                                <label className="control-label"><span className="text-danger"></span>Middle Name:</label>
+                                                <input type="text" className='form-control' name='MiddleNm' value={editRecipientInformation?.MiddleNm} maxLength="9" onChange={(e) => { handleRecipientInfo(e) }} />
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="labelName">
+                                                <label className="control-label"><span className="text-danger">*</span>Last Name:</label>
+                                                <input type="text" className='form-control' name='LastNm' value={editRecipientInformation?.LastNm} onChange={(e) => { handleRecipientInfo(e) }} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row d-flex justify-content-center mb-2">
+                                        <div className="col-md-6">
+
+                                        </div>
+                                        <div className="col-md-6">
+                                            <span><input className="form-check-input cursor-pointer" type="checkbox" name='IsForeign' onClick={(e) => { handleRecipientInfo(e) }} checked={editRecipientInformation?.IsForeign} /> Is Foreign?</span>
+                                        </div>
+                                    </div>
+                                    {editRecipientInformation?.IsForeign ?
+                                        <>
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Suffix:</label>
+                                                        <select className='form-control form-select' name='Suffix' value={editRecipientInformation?.Suffix} onChange={(e) => { handleRecipientInfo(e) }}  >
+                                                          {suffixOptions?.map((suffixOption, index) => {
+                                                            return <option key={suffixOption.key} selected={suffixOption.value == editRecipientInformation.Suffix ? `selected` : ``} value={suffixOption.label}>
+                                                              {suffixOption?.label}
+                                                            </option>
+                                                          })}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>Address1:</label>
+                                                        <input type="text" className='form-control' name='Address1' value={editRecipientInformation?.Address1} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Address2:</label>
+                                                        <input type="text" className='form-control' name='Address2' value={editRecipientInformation?.Address2} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>City:</label>
+                                                        <input type="text" className='form-control' name='City' value={editRecipientInformation?.City} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>ProvinceOrStateNm:</label>
+                                                        <input type="text" className='form-control' name='ProvinceOrStateNm' value={editRecipientInformation?.ProvinceOrStateNm} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>Country:</label>
+                                                        <select className="form-control form-select" name='Country' value={editRecipientInformation?.Country} onChange={(e) => { handleRecipientInfo(e) }} >
+                                                            {countriesOptions.map((countryOption, index) => {
+                                                                return <option key={index} selected={countryOption?.code == editRecipientInformation?.Country ? `selected` : ``} value={countryOption?.code}>
+                                                                    {countryOption?.label}
+                                                                </option>
+                                                            })}
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>PostalCd:</label>
+                                                        <input type="text" className='form-control' name='PostalCd' value={editRecipientInformation?.PostalCd} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Email:</label>
+                                                        <input type="text" className='form-control' name='Email' value={editRecipientInformation?.Email} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Phone:</label>
+                                                        <input type="text" className='form-control' name='Phone' maxLength='10' value={editRecipientInformation?.Phone} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Fax:</label>
+                                                        <input type="text" className='form-control' name='Fax' maxLength='10' value={editRecipientInformation?.Fax} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </> :
+                                        <>
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Suffix:</label>
+                                                        <select className='form-control form-select' name='Suffix' value={editRecipientInformation?.Suffix} onChange={(e) => { handleRecipientInfo(e) }}  >
+                                                          {suffixOptions?.map((suffixOption, index) => {
+                                                            return <option key={suffixOption.key} selected={suffixOption.value == editRecipientInformation.Suffix ? `selected` : ``} value={suffixOption.label}>
+                                                              {suffixOption?.label}
+                                                            </option>
+                                                          })}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>Address1:</label>
+                                                        <input type="text" className='form-control' name='Address1' value={editRecipientInformation?.Address1} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Address2:</label>
+                                                        <input type="text" className='form-control' name='Address2' value={editRecipientInformation?.Address2} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>City:</label>
+                                                        <input type="text" className='form-control' name='City' value={editRecipientInformation?.City} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>State:</label>
+                                                        <select className="form-control form-select" name='State' value={editRecipientInformation?.State} onChange={(e) => { handleRecipientInfo(e) }} >
+                                                            {statesOptions?.map((stateOption, index) => {
+                                                                return <option key={index} selected={stateOption?.code === editRecipientInformation?.State ? `selected` : ``} value={stateOption?.code}>
+                                                                    {stateOption?.label}
+                                                                </option>
+                                                            })}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>ZipCd:</label>
+                                                        <input type="text" className='form-control' name='ZipCd' value={editRecipientInformation?.ZipCd} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Email:</label>
+                                                        <input type="text" className='form-control' name='Email' value={editRecipientInformation?.Email} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Phone:</label>
+                                                        <input type="text" className='form-control' name='Phone' maxLength='10' value={editRecipientInformation?.Phone} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Fax:</label>
+                                                        <input type="text" className='form-control' name='Fax' maxLength='10' value={editRecipientInformation?.Fax} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+
+                                                </div>
+                                            </div>
+                                        </>
+                                    }
+                                    </>
+                                    }
+                                   
                                 </div>
 
                                 <h5 className="sub-head text-left mt-4 mb-3 " style={{ fontWeight: 'bold' }}>Form 1099-NEC Details</h5>
@@ -1091,6 +1411,13 @@ const UpdateForm1099NEC = () => {
                                             paymentMethodOptions={paymentMethodOptions}
                                             overPaymentTypeOptions={overPaymentTypeOptions}
                                             monthOptions={monthOptions}
+                                            removeInputFields={removeInputFields}
+                                            addInputField={addInputField}
+                                            inputFields={editInputFields}
+                                            setInputFields={setEditInputFields}
+                                            setCountLength={setCountLength}
+                                            handleChange={handleChange}
+                                            countLength={countLength}
                                         />
                                     </> : editStateInformation?.State1 === 'WV' ?
                                         <>
@@ -1115,6 +1442,13 @@ const UpdateForm1099NEC = () => {
                                                 paymentMethodOptions={paymentMethodOptions}
                                                 overPaymentTypeOptions={overPaymentTypeOptions}
                                                 monthOptions={monthOptions}
+                                                removeInputFields={removeInputFields}
+                                                addInputField={addInputField}
+                                                inputFields={editInputFields}
+                                                setInputFields={setEditInputFields}
+                                                setCountLength={setCountLength}
+                                                handleChange={handleChange}
+                                                countLength={countLength}
                                             />
                                         </> :
                                     <></>

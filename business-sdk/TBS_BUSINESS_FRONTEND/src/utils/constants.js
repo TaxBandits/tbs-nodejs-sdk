@@ -804,3 +804,17 @@ export const statesShort = {
         63:"AE",
         65:"AP"
 }
+
+export const suffix ={
+    0:'Suffix',
+    1:'Jr',
+    2:"Sr",
+    3:"I",
+    4:"II",
+    5:"III",
+    6:"IV",
+    7:"V",
+    8:"VI",
+    9:"VII",
+}
+

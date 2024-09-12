@@ -1,7 +1,6 @@
-## TaxBandits Form 1099-K API SDK
+## TaxBandits Form1099-K API SDK
 ## Introduction
 In this SDK, we demonstrate how to ValidateForm, Create, List, Update, Status, Delete, Transmit, RequestPdf, and RequestDraftPdfUrl of Form1099K using TaxBandits API. Here we use React JS as frontend and Node JS as backend.
-
 ## Cloning and Running the Application in local
 - Clone the project into your local machine.
 
@@ -77,6 +76,8 @@ In this SDK, we demonstrate how to ValidateForm, Create, List, Update, Status, D
     - `controllers/form1099K/transmitForm1099K.js`  - This file contains a function that defines the transmit Form1099K response sent to a client when making a request to the server.
     - `controllers/form1099K/updateForm1099K.js`  - This file contains a function that defines the update Form1099K response sent to a client when making a request to the server.
     - `controllers/form1099K/validateForm1099K.js`  - This file contains a function that defines the validate Form1099K response sent to a client when making a request to the server.
+-   `utils/`  - This folder contains functions that is used for controllers.
+    -   `utils/unixEpoch.js`  - This file contains function that is used for unixEpoch conversion that is passed as payload for generating JWS key.
 
 #### React JS Application
 -   `package.json`  - This file stores our application information such as name, version , dependencies and more on. 

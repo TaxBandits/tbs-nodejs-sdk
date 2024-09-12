@@ -289,7 +289,7 @@ const ListForm1099k = () => {
                           <td className='text-start'>{form1099K?.SubmissionId}</td>
                           <td className='text-start'>{form1099K?.Recipient?.RecordId}</td>
                           <td className='text-start'>{form1099K?.Recipient?.RecipientId}</td>
-                          <td className='text-start'>{form1099K?.Recipient?.RecipientNm}</td>
+                          <td className='text-start'>{form1099K?.Recipient?.RecipientNm == null ? form1099K?.Recipient?.FirstNm : form1099K?.Recipient?.RecipientNm }</td>
                           <td className='text-center'>
 
                             <div

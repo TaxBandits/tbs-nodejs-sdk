@@ -29,16 +29,16 @@ const Home = () => {
             <img src={logo} alt="TaxBandits Logo" className="mb-5 logo" />
             <h1>Business Endpoints</h1>
           </div>
-          <div className="col-md-4 col-lg-4 mt-4">
-            <div>
-              <div className="shadow rounded p-4 bg-white card-box  position-relative">
+          <div className="col-md-4 col-lg-4 mt-4 d-flex">
+            <div className='d-flex'>
+              <div className="shadow rounded p-4 bg-white card-box  position-relative align-self-stretch">
                 <img className="top-eye-icon" src={topEyeIcon} alt="TaxBandits" />
                 <div className="text-center grediant-bg">
                   <img src={createBusiness} className=" w-70px" alt="Create Business" />
                 </div>
                 <h2 className="card-head text-center mb-0 mt-2">Create Business</h2>
                 <div className="d-flex align-items-center justify-content-center">
-                  <p className="mt-3 mb-0 text-center">Business Endpoint allows you to Create Employers/Payers to add the Business Information to the TaxBandits account. In response, TaxBandits will provide BusinessId which is a unique identifier. You can provide the BusinessId alone in the future form filing requests instead of sending the complete Business information again for each return.</p>
+                  <p className="mt-3 mb-0 text-start">Business Endpoint allows you to Create Employers/Payers to add the Business Information to the TaxBandits account. In response, TaxBandits will provide BusinessId which is a unique identifier. You can provide the BusinessId alone in the future form filing requests instead of sending the complete Business information again for each return.</p>
                 </div>
                 <div className="text-center mt-4">
                   <button className="btn btn_primary mx-2" onClick={navigateToCreateBusiness}>Create Business</button>
@@ -46,16 +46,16 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="col-md-4 col-lg-4 mt-4">
-            <div>
-              <div className="shadow rounded p-4 bg-white position-relative card-box">
+          <div className="col-md-4 col-lg-4 mt-4 d-flex">
+            <div className='d-flex'>
+              <div className="shadow rounded p-4 bg-white position-relative card-box align-self-stretch">
                 <img className="top-eye-icon" src={topEyeIcon} alt="TaxBandits" />
                 <div className="text-center grediant-bg">
                   <img src={listBusiness} className="w-70px" alt="Business List" />
                 </div>
                 <h2 className="card-head text-center mt-2 mb-0">List and Update Business</h2>
                 <div className="d-flex align-items-center justify-content-center">
-                  <p className="mt-3 mb-0 text-center">The List method lists all the Employers/Payers in the TaxBandits account based on the date range (Date the Employer/Payer was created in TaxBandits) provided in the Request. From the Businesses listed, you can select a particular business and update Business information using the Update endpoint.</p>
+                  <p className="mt-3 mb-0 text-start">The List method lists all the Employers/Payers in the TaxBandits account based on the date range (Date the Employer/Payer was created in TaxBandits) provided in the Request. From the Businesses listed, you can select a particular business and update Business information using the Update endpoint.</p>
                 </div>
                 <div className="text-center mt-4">
                   <button className="btn btn_primary mx-2" onClick={navigateToListBusiness}>List & Update Business</button>

@@ -1,16 +1,17 @@
 import React from "react"
-import { useState, useEffect } from "react"
+import {useEffect } from "react"
 
 // Recon State Details for AL
-const ReconStateAL = ({ reconStateAL, setReconALInput, reconALInput, handleReconStateAL, monthOptions, overPaymentTypeOptions, paymentMethodOptions, bankAccountTypeOptions, statesOptions, setInputData }) => {
+const ReconStateAL = ({ reconStateAL,handleChange,setInputFields,inputFields, removeInputFields, addInputField,setCountLength,countLength,setReconALInput, reconALInput, handleReconStateAL, monthOptions, overPaymentTypeOptions, paymentMethodOptions, bankAccountTypeOptions, statesOptions, setInputData }) => {
 
-  // Initializing state for count length for IncomeTaxWHAndRemittValues data
-  const [countLength, setCountLength] = useState(0)
-
+ 
+//  let arr=[]
+//  const inputs=arr.push(inputFields)
+//  console.log("inputs",inputs);
   // Updating Input Fields of IncomeTaxWHAndRemitt in Use Effect
   useEffect(() => {
     if (reconStateAL?.IncomeTaxWHAndRemitt?.length > 0) {
-      const incomeTaxWHAndRemittValues = reconStateAL?.IncomeTaxWHAndRemitt?.map((data, i) => {
+      const incomeTaxWHAndRemittValues = inputFields?.map((data, i) => {
         setCountLength(i + 1)
         return {
           Month: data?.Month,
@@ -18,44 +19,13 @@ const ReconStateAL = ({ reconStateAL, setReconALInput, reconALInput, handleRecon
           TaxRemitt: data?.TaxRemitt
         }
       })
-
-      setInputFields(incomeTaxWHAndRemittValues)
+      console.log("inputss",inputFields);
+   
+        setInputFields(incomeTaxWHAndRemittValues)
     }
   }, [reconStateAL])
 
-  // Initializing state for IncomeTaxWHAndRemitt input fields
-  const [inputFields, setInputFields] = useState([{
-    Month: "",
-    TaxWH: 0,
-    TaxRemitt: 0
-  }])
-  setInputData(inputFields)
-
-  // Function to handle add IncomeTaxWHAndRemitt input fields
-  const addInputField = () => {
-    setCountLength(countLength + 1)
-    setInputFields([...inputFields, {
-      Month: "",
-      TaxWH: 0,
-      TaxRemitt: 0
-    }])
-  }
-
-  //Function to handle remove IncomeTaxWHAndRemitt input fields
-  const removeInputFields = (index) => {
-    setCountLength(countLength - 1)
-    const rows = [...inputFields]
-    rows.splice(index, 1)
-    setInputFields(rows)
-  }
-
-  //Handle onchange function for input values
-  const handleChange = (index, e) => {
-    const { name, value } = e.target
-    const list = [...inputFields]
-    list[index][name] = value
-    setInputFields(list)
-  }
+  
 
   return (
     <>
@@ -86,6 +56,7 @@ const ReconStateAL = ({ reconStateAL, setReconALInput, reconALInput, handleRecon
           </tr>
         </thead>
         <tbody>
+          {console.log(inputFields,'inputFields12345')}
           {
             inputFields?.map((data, index) => {
               const { Month, TaxWH, TaxRemitt } = data

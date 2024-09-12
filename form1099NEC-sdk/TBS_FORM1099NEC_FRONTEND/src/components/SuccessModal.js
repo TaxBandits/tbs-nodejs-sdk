@@ -8,8 +8,9 @@ const SuccessModal = ({ successData, businessData, status }) => {
   const navigate = useNavigate()
 
   //Navigating to List Form1099NEC Page
+  const name = businessData?.BusinessName == null ? businessData?.FirstNm : businessData?.BusinessName
   const navigateToList = () => {
-    navigate(`/listForm1099NEC/${businessData?.BusinessId}/${businessData?.BusinessName}`)
+    navigate(`/listForm1099NEC/${businessData?.BusinessId}/${name}`)
   }
 
   return (
@@ -73,6 +74,56 @@ const SuccessModal = ({ successData, businessData, status }) => {
                       </tbody>
                     </table>
                   </div>
+                  {successData?.Form1099Records?.SuccessRecords[0]?.OnlineAccess?.Status==="NOT_CREATED" &&
+                     <div className="table-container mb-3">
+                       <h2 className="tabel-sub-head">Online Access Response: (Warning)</h2>
+                     <table>
+                       <tbody>
+                         <tr className="fw-600 ">
+                           <th className="text-center fw-600" width="30%">Status</th>
+                           <th className="text-center" width="35%">Email</th>
+                           <th className="text-center" width="35%">Info</th>
+                         </tr>
+                         <tr>
+                           <td className="taL text-center">
+                             {successData?.Form1099Records?.SuccessRecords[0]?.OnlineAccess?.Status}
+                           </td>
+                           <td className="taL text-center">
+                             {successData?.Form1099Records?.SuccessRecords[0]?.OnlineAccess?.Email==null?'---':successData?.Form1099Records?.SuccessRecords[0]?.OnlineAccess?.Email}
+                           </td>
+                           <td className="taL text-center">
+                             {successData?.Form1099Records?.SuccessRecords[0]?.OnlineAccess?.Info}
+                           </td>
+                         </tr>
+                       </tbody>
+                     </table>
+                   </div>
+                  }
+                  {successData?.Form1099Records?.SuccessRecords[0]?.Postal?.Status==="NOTCREATED" &&
+                     <div className="table-container mb-3">
+                       <h2 className="tabel-sub-head">Postal Response: (Warning)</h2>
+                     <table>
+                       <tbody>
+                         <tr className="fw-600 ">
+                           <th className="text-center fw-600" width="30%">Status</th>
+                           <th className="text-center" width="35%">StatusTs</th>
+                           <th className="text-center" width="35%">Info</th>
+                         </tr>
+                         <tr>
+                           <td className="taL text-center">
+                             {successData?.Form1099Records?.SuccessRecords[0]?.Postal?.Status}
+                           </td>
+                           <td className="taL text-center">
+                             {successData?.Form1099Records?.SuccessRecords[0]?.Postal?.StatusTs=== null ? "---" :successData?.Form1099Records?.SuccessRecords[0]?.Postal?.StatusTs}
+                           </td>
+                           <td className="taL text-center">
+                             {successData?.Form1099Records?.SuccessRecords[0]?.Postal?.Info}
+                           </td>
+                         </tr>
+                       </tbody>
+                     </table>
+                   </div>
+                  }
                 </> :
                 <>
                   <div className="table-container mt-2 mb-4">
@@ -97,6 +148,7 @@ const SuccessModal = ({ successData, businessData, status }) => {
                       </tbody>
                     </table>
                   </div>
+
                 </>
               }
             </div>

@@ -41,10 +41,10 @@ const ErrorModal = (errorData) => {
                     <table>
                       <tbody>
                         <tr className="fw-600 ">
-                          <th className="text-center fw-600" width="30%">Id</th>
-                          <th className="text-center" width="35%">Name</th>
-                          <th className="text-center" width="35%">Message</th>
-                          <th className="text-center" width="35%">Type</th>
+                          <th className="text-center fw-600">Id</th>
+                          <th className="text-center">Name</th>
+                          <th className="text-center">Message</th>
+                          <th className="text-center">Type</th>
                         </tr>
 
                         {errorData?.errorData?.Errors?.map((error, index) => {

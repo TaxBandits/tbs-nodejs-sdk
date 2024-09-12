@@ -1,7 +1,15 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 //Modal to show success records from Create Business Endpoint
 const BusinessSuccessModal = (successData) => {
+ 
+  //To navigate between pages using useNavigate Hook
+  const navigate = useNavigate()
+
+  const navigateToList = () => {
+    navigate(`/listBusiness`)
+  }
   
   return (
     <>
@@ -10,7 +18,8 @@ const BusinessSuccessModal = (successData) => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalToggleLabel">Create Business Response</h5>
-              <button type="button" className="btn-close bg-white rounded-circle border-0 fw-bold position-absolute end-n-10 top-n-13 modal-close button-hide fs-18 fw-500" data-bs-dismiss="modal" aria-label="Close">X</button>
+              <button type="button" className="btn-close bg-white rounded-circle border-0 fw-bold position-absolute end-n-10 top-n-13 modal-close button-hide fs-18 fw-500"
+               onClick={navigateToList} data-bs-dismiss="modal" aria-label="Close">X</button>
             </div>
             <div className="modal-body">
               <div className="table-container mt-2 mb-4">
@@ -56,7 +65,7 @@ const BusinessSuccessModal = (successData) => {
                         {successData?.successData?.EINorSSN}
                       </td>
                       <td className="text-center border-radious-bottom-right align-top">
-                        {successData?.successData?.BusinessNm}
+                        {successData?.successData?.BusinessNm == null ? successData?.successData?.FirstNm : successData?.successData?.BusinessNm }
                       </td>
                     </tr>
                   </tbody>

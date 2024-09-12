@@ -5,7 +5,7 @@ import axios from 'axios' // Importing Axios to make HTTP calls.
 import logo from '../images/tbsLogo.png' // Importing Images
 import { useParams, Link } from 'react-router-dom'
 import Spinner from '../components/Spinner' // Importing spinner for loader
-import { states, countries, businessType, businessTypeShorts, statesShort, countryShorts, kindOfEmployer, kindOfPayer, EstateBusinessMembers, PartnershipBusinessMembers, CorporationBusinessMembers, ExemptOrganizationBusinessMembers, SoleProprietorshipBusinessMembers } from '../utils/constants' // Importing static values from utils
+import { states, countries, suffix, businessType, businessTypeShorts, statesShort, countryShorts, kindOfEmployer, kindOfPayer, EstateBusinessMembers, PartnershipBusinessMembers, CorporationBusinessMembers, ExemptOrganizationBusinessMembers, SoleProprietorshipBusinessMembers } from '../utils/constants' // Importing static values from utils
 import SuccessModal from '../components/SuccessModal' // Importing Success Modal
 import ErrorModal from '../components/ErrorModal'  // Importing Error Modal
 
@@ -35,6 +35,10 @@ const UpdateForm1099misc = () => {
     })
     const [editBusinessDetails, setEditBusinessDetails] = useState({
         BusinessName: "",
+        FirstNm :"",
+        LastNm :"",
+        MiddleNm :"",
+        Suffix :"",
         TradeName: "",
         EINOrSSN: "",
         IsEIN: false,
@@ -62,11 +66,18 @@ const UpdateForm1099misc = () => {
     })
 
     const [editRecipientInformation, setEditRecipientInformation] = useState({
+        IsOnlineAccess:false,
+        IsPostal:false,
+        IsForced:false,
         SequenceId: "",
         TINType: "",
         TIN: "",
         FirstPayeeNm: "",
         SecondPayeeNm: "",
+        FirstNm :"",
+        LastNm :"",
+        MiddleNm :"",
+        Suffix :"",
         IsForeign: false,
         Address1: "",
         Address2: "",
@@ -179,6 +190,17 @@ const UpdateForm1099misc = () => {
             code: countryShorts[key]
         })
     }
+
+     // Storing key values of suffix into new array for Dropdown
+     const suffixOptions = []
+     for (const key in suffix) {
+         suffixOptions.push({
+             value: suffix[key],
+             label: suffix[key],
+             key: key,
+         })
+     }
+
     // To get Business by Id by requesting get API
     const getform1099ById = async () => {
         try {
@@ -189,6 +211,9 @@ const UpdateForm1099misc = () => {
                 const businessDetails = getForm1099miscResponse?.data?.Form1099Records?.ReturnHeader?.Business
                 const SubmissionManifest = getForm1099miscResponse?.data?.Form1099Records?.SubmissionManifest
                 const SequenceId = getForm1099miscResponse?.data?.Form1099Records?.ReturnData[0]?.SequenceId
+                const IsOnlineAccess = getForm1099miscResponse?.data?.Form1099Records?.ReturnData[0]?.IsOnlineAccess
+                const IsPostal = getForm1099miscResponse?.data?.Form1099Records?.ReturnData[0]?.IsPostal
+                const IsForced = getForm1099miscResponse?.data?.Form1099Records?.ReturnData[0]?.IsForced
                 const RecordId = getForm1099miscResponse?.data?.Form1099Records?.ReturnData[0]?.RecordId
                 const RecipientId = getForm1099miscResponse?.data?.Form1099Records?.ReturnData[0]?.Recipient?.RecipientId
                 const RecipientDetails = getForm1099miscResponse?.data?.Form1099Records?.ReturnData[0]?.Recipient
@@ -204,6 +229,10 @@ const UpdateForm1099misc = () => {
                 setEditBusinessDetails({
                     BusinessId: businessDetails?.BusinessId,
                     BusinessName: businessDetails?.BusinessNm,
+                    FirstNm :businessDetails?.FirstNm,
+                    LastNm :businessDetails?.LastNm,
+                    MiddleNm :businessDetails?.MiddleNm,
+                    Suffix :businessDetails?.Suffix,
                     PayerRef: businessDetails?.PayerRef,
                     TradeName: businessDetails?.TradeNm,
                     EINOrSSN: businessDetails?.EINorSSN,
@@ -242,6 +271,9 @@ const UpdateForm1099misc = () => {
                 })
 
                 setEditRecipientInformation({
+                    IsOnlineAccess:IsOnlineAccess,
+                    IsPostal:IsPostal,
+                    IsForced:IsForced,
                     SequenceId: SequenceId,
                     RecordId: RecordId,
                     RecipientId: RecipientId,
@@ -249,6 +281,10 @@ const UpdateForm1099misc = () => {
                     TINType: RecipientDetails?.TINType,
                     FirstPayeeNm: RecipientDetails?.FirstPayeeNm,
                     SecondPayeeNm: RecipientDetails?.SecondPayeeNm,
+                    FirstNm :RecipientDetails?.FirstNm,
+                    LastNm :RecipientDetails?.LastNm,
+                    MiddleNm :RecipientDetails?.MiddleNm,
+                    Suffix :RecipientDetails?.Suffix,
                     IsForeign: RecipientDetails?.IsForeign,
                     Address1: RecipientDetails?.IsForeign ? RecipientDetails?.ForeignAddress?.Address1 : RecipientDetails?.USAddress?.Address1,
                     Address2: RecipientDetails?.IsForeign ? RecipientDetails?.ForeignAddress?.Address2 : RecipientDetails?.USAddress?.Address2,
@@ -382,6 +418,10 @@ const UpdateForm1099misc = () => {
                 ReturnHeader: {
                     Business: {
                         BusinessNm: editBusinessDetails?.BusinessName,
+                        FirstNm :editBusinessDetails?.FirstNm,
+                        LastNm :editBusinessDetails?.LastNm,
+                        MiddleNm :editBusinessDetails?.MiddleNm,
+                        Suffix :editBusinessDetails?.Suffix,
                         PayerRef: editBusinessDetails?.PayerRef,
                         TradeNm: editBusinessDetails?.TradeName,
                         EINorSSN: editBusinessDetails?.EINOrSSN,
@@ -420,12 +460,19 @@ const UpdateForm1099misc = () => {
                 ReturnData: [{
                     RecordId: editRecipientInformation?.RecordId,
                     SequenceId: editRecipientInformation?.SequenceId,
+                    IsOnlineAccess:editRecipientInformation?.IsOnlineAccess,
+                    IsForced:editRecipientInformation?.IsForced,
+                    IsPostal:editRecipientInformation?.IsPostal,
                     Recipient: {
                         RecipientId: editRecipientInformation?.RecipientId,
                         TINType: selectedOption?.TINType,
                         TIN: editRecipientInformation?.TIN,
                         FirstPayeeNm: editRecipientInformation?.FirstPayeeNm,
                         SecondPayeeNm: editRecipientInformation?.SecondPayeeNm,
+                        FirstNm:editRecipientInformation?.FirstNm,
+                        LastNm:editRecipientInformation?.LastNm,
+                        MiddleNm:editRecipientInformation?.MiddleNm,
+                        Suffix:editRecipientInformation?.Suffix,
                         IsForeign: editRecipientInformation?.IsForeign,
                         USAddress: {
                             Address1: !editRecipientInformation.IsForeign ? editRecipientInformation?.Address1 : "",
@@ -512,7 +559,7 @@ const UpdateForm1099misc = () => {
     const handleRecipientInfo = (e) => {
         const { name, value, checked } = e.target
 
-        if (name == "IsForeign" || name == "TINType") {
+        if (name == "IsForeign" || name == "TINType" || name =="IsOnlineAccess" || name =="IsPostal" || name =="IsForced") {
             if (checked) {
                 setEditRecipientInformation({
                     ...editRecipientInformation,
@@ -622,7 +669,23 @@ const UpdateForm1099misc = () => {
 
                                 <div className="row">
                                     <h5 className="sub-head text-left mt-4 mb-3 " style={{ fontWeight: 'bold' }}>Recipient Details</h5>
+                                    <div className="row d-flex justify-content-center mb-15px">
+                                    <div className='col md-3 d-flex' style={{'justify-content': 'space-evenly'}}>
+                                        <div>
+                                            <input className="me-1 form-check-input cursor-pointer" type="checkbox" name='IsPostal' onClick={(e) => { handleRecipientInfo(e) }} checked={editRecipientInformation?.IsPostal} /><span className="me-3">IsPostal</span>
+                                        </div>
+                                        <div>
 
+                                            <input className="me-1 form-check-input cursor-pointer" type="checkbox" name='IsOnlineAccess' onClick={(e) => { handleRecipientInfo(e) }} checked={editRecipientInformation?.IsOnlineAccess} /><span className="me-3">IsOnlineAccess</span>
+                                        </div>
+                                        <div>
+                                            <input className="me-1 form-check-input cursor-pointer" type="checkbox" name='IsForced' onClick={(e) => { handleRecipientInfo(e) }} checked={editRecipientInformation?.IsForced} /><span className="me-3">IsForced</span>
+                                        </div>
+                                       
+                                    </div>
+                                                <div className="col-md-6">
+                                                </div>
+                                            </div>
                                     <div className="row d-flex justify-content-center mb-15px">
                                         <div className="col-md-6">
                                             <div className="labelName">
@@ -655,7 +718,11 @@ const UpdateForm1099misc = () => {
                                         </div>
 
                                     </div>
-                                    <div className="row d-flex justify-content-center mb-15px">
+
+                                    {
+                                        selectedOption?.TINType === "EIN" ? 
+                                        <>
+                                         <div className="row d-flex justify-content-center mb-15px">
                                         <div className="col-md-6">
                                             <div className="labelName">
                                                 <label className="control-label"><span className="text-danger">*</span>TIN:</label>
@@ -664,7 +731,7 @@ const UpdateForm1099misc = () => {
                                         </div>
                                         <div className="col-md-6">
                                             <div className="labelName">
-                                                <label className="control-label"><span className="text-danger">*</span>First Name:</label>
+                                                <label className="control-label"><span className="text-danger">*</span>First PayeeName:</label>
                                                 <input type="text" className='form-control' name='FirstPayeeNm' value={editRecipientInformation.FirstPayeeNm} onChange={(e) => { handleRecipientInfo(e) }} />
                                             </div>
                                         </div>
@@ -682,7 +749,7 @@ const UpdateForm1099misc = () => {
                                             <div className="row d-flex justify-content-center mb-15px">
                                                 <div className="col-md-6">
                                                     <div className="labelName">
-                                                        <label className="control-label"><span className="text-danger"></span>Last Name:</label>
+                                                        <label className="control-label"><span className="text-danger"></span>Second PayeeName:</label>
                                                         <input type="text" className='form-control' name='SecondPayeeNm' value={editRecipientInformation.SecondPayeeNm} onChange={(e) => { handleRecipientInfo(e) }} />
                                                     </div>
                                                 </div>
@@ -765,7 +832,7 @@ const UpdateForm1099misc = () => {
                                             <div className="row d-flex justify-content-center mb-15px">
                                                 <div className="col-md-6">
                                                     <div className="labelName">
-                                                        <label className="control-label"><span className="text-danger"></span>Last Name:</label>
+                                                        <label className="control-label"><span className="text-danger"></span>Second PayeeName:</label>
                                                         <input type="text" className='form-control' name='SecondPayeeNm' value={editRecipientInformation.SecondPayeeNm} onChange={(e) => { handleRecipientInfo(e) }} />
                                                     </div>
                                                 </div>
@@ -839,6 +906,222 @@ const UpdateForm1099misc = () => {
                                             </div>
                                         </>
                                     }
+                                        </>:
+                                        <>
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                        <div className="col-md-6">
+                                            <div className="labelName">
+                                                <label className="control-label"><span className="text-danger">*</span>TIN:</label>
+                                                <input type="text" className='form-control' name='TIN' value={editRecipientInformation?.TIN} maxLength="9" onChange={(e) => { handleRecipientInfo(e) }} />
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="labelName">
+                                                <label className="control-label"><span className="text-danger">*</span>First Name:</label>
+                                                <input type="text" className='form-control' name='FirstNm' value={editRecipientInformation?.FirstNm} onChange={(e) => { handleRecipientInfo(e) }} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row d-flex justify-content-center mb-15px">
+                                        <div className="col-md-6">
+                                            <div className="labelName">
+                                                <label className="control-label"><span className="text-danger"></span>Middle Name:</label>
+                                                <input type="text" className='form-control' name='MiddleNm' value={editRecipientInformation?.MiddleNm} maxLength="9" onChange={(e) => { handleRecipientInfo(e) }} />
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="labelName">
+                                                <label className="control-label"><span className="text-danger">*</span>Last Name:</label>
+                                                <input type="text" className='form-control' name='LastNm' value={editRecipientInformation?.LastNm} onChange={(e) => { handleRecipientInfo(e) }} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row d-flex justify-content-center mb-2">
+                                        <div className="col-md-6">
+
+                                        </div>
+                                        <div className="col-md-6">
+                                            <span><input className="form-check-input cursor-pointer" type="checkbox" name='IsForeign' onClick={(e) => { handleRecipientInfo(e) }} checked={editRecipientInformation.IsForeign} /> Is Foreign?</span>
+                                        </div>
+                                    </div>
+                                    {editRecipientInformation.IsForeign ?
+                                        <>
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Suffix:</label>
+                                                        <select className='form-control form-select' name='Suffix' value={editRecipientInformation?.Suffix} onChange={(e) => { handleRecipientInfo(e) }}  >
+                                                          {suffixOptions?.map((suffixOption, index) => {
+                                                            return <option key={suffixOption.key} selected={suffixOption.value == editRecipientInformation.Suffix ? `selected` : ``} value={suffixOption.label}>
+                                                              {suffixOption?.label}
+                                                            </option>
+                                                          })}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>Address1:</label>
+                                                        <input type="text" className='form-control' name='Address1' value={editRecipientInformation.Address1} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Address2:</label>
+                                                        <input type="text" className='form-control' name='Address2' value={editRecipientInformation.Address2} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>City:</label>
+                                                        <input type="text" className='form-control' name='City' value={editRecipientInformation.City} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>ProvinceOrStateNm:</label>
+                                                        <input type="text" className='form-control' name='ProvinceOrStateNm' value={editRecipientInformation.ProvinceOrStateNm} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>Country:</label>
+                                                        <select className="form-control form-select" name='Country' value={editRecipientInformation.Country} onChange={(e) => { handleRecipientInfo(e) }} >
+                                                            {countriesOptions.map((countryOption, index) => {
+                                                                return <option key={index} selected={countryOption?.code == editRecipientInformation.Country ? `selected` : ``} value={countryOption?.code}>
+                                                                    {countryOption?.label}
+                                                                </option>
+                                                            })}
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>PostalCd:</label>
+                                                        <input type="text" className='form-control' name='PostalCd' value={editRecipientInformation?.PostalCd} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Email:</label>
+                                                        <input type="text" className='form-control' name='Email' value={editRecipientInformation?.Email} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Phone:</label>
+                                                        <input type="text" className='form-control' name='Phone' maxLength='10' value={editRecipientInformation?.Phone} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Fax:</label>
+                                                        <input type="text" className='form-control' name='Fax' value={editRecipientInformation?.Fax} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </> :
+                                        <>
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Suffix:</label>
+                                                        <select className='form-control form-select' name='Suffix' value={editRecipientInformation?.Suffix} onChange={(e) => { handleRecipientInfo(e) }}  >
+                                                          {suffixOptions?.map((suffixOption, index) => {
+                                                            return <option key={suffixOption.key} selected={suffixOption.value == editRecipientInformation?.Suffix ? `selected` : ``} value={suffixOption.label}>
+                                                              {suffixOption?.label}
+                                                            </option>
+                                                          })}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>Address1:</label>
+                                                        <input type="text" className='form-control' name='Address1' value={editRecipientInformation.Address1} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Address2:</label>
+                                                        <input type="text" className='form-control' name='Address2' value={editRecipientInformation.Address2} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>City:</label>
+                                                        <input type="text" className='form-control' name='City' value={editRecipientInformation.City} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>State:</label>
+                                                        <select className="form-control form-select" name='State' value={editRecipientInformation.State} onChange={(e) => { handleRecipientInfo(e) }} >
+                                                            {statesOptions?.map((stateOption, index) => {
+                                                                return <option key={index} selected={stateOption?.code === editRecipientInformation?.State ? `selected` : ``} value={stateOption?.code}>
+                                                                    {stateOption?.label}
+                                                                </option>
+                                                            })}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger">*</span>ZipCd:</label>
+                                                        <input type="text" className='form-control' name='ZipCd' value={editRecipientInformation.ZipCd} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Email:</label>
+                                                        <input type="text" className='form-control' name='Email' value={editRecipientInformation.Email} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Phone:</label>
+                                                        <input type="text" className='form-control' name='Phone' maxLength='10' value={editRecipientInformation.Phone} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row d-flex justify-content-center mb-15px">
+                                                <div className="col-md-6">
+                                                    <div className="labelName">
+                                                        <label className="control-label"><span className="text-danger"></span>Fax:</label>
+                                                        <input type="text" className='form-control' name='Fax' maxLength='10' value={editRecipientInformation.Fax} onChange={(e) => { handleRecipientInfo(e) }} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6">
+
+                                                </div>
+                                            </div>
+                                        </>
+                                    }
+
+                                        </>
+                                    }
+                                   
                                 </div>
 
                                 <h5 className="sub-head text-left mt-4 mb-3 " style={{ fontWeight: 'bold' }}>Form 1099-MISC Details</h5>
@@ -1117,7 +1400,7 @@ const UpdateForm1099misc = () => {
                             </form>
                         </div>
                     </div>
-                    <Link className='btn btn_back mb-3' to={`/listForm1099MISC/${businessData.BusinessId}`} >Back</Link>
+                    <Link className='btn btn_back mt-3 mb-5' to={`/listForm1099MISC/${businessData.BusinessId}`} >Back</Link>
                 </div>
             </div>
             

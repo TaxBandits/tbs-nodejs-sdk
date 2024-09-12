@@ -5,7 +5,7 @@ In this SDK, we demonstrate how to  Request, List, Status and Cancel TIN Matchin
 
  - Clone the project into your local machine.
     ```bash
-    git clone https://github.com/TaxBandits/tbs-nodejs-sdk.git
+    git clone https://github.com/SPAN-Enterprises/TaxBandits-SDK.git
     ```
  - Let's Navigate into the sdk-nodejs &rarr; tin-matching-recipients-sdk folder.
  - Open the frontend and backend folder path in a separate integrated terminals, so we can run our frontend and backend in two different ports.
@@ -13,7 +13,7 @@ In this SDK, we demonstrate how to  Request, List, Status and Cancel TIN Matchin
 ## Dependencies Used
 ### Runtime dependencies
 #### Node JS Application
- - **express** - The application framework for building RESTful APIs with Node.js.
+ - **express** - The application framework for building RESTful APIs with Node.js
  - **dotenv** - It is used to load environment variables.
  - **axios** - This library is used to make HTTP Calls.
  - **jws** - This library used for generating JWT (JSON Web Token).
@@ -95,24 +95,25 @@ In this SDK, we demonstrate how to  Request, List, Status and Cancel TIN Matchin
 ## Request TIN Matching
 For requesting TIN Matching, pass the recipient data as input along with Access Token in the header as Bearer Token (Generated using TaxBandits OAuth authentication API). After requesting request method in TIN Matching Recipient API, the response will be shown in a modal.
 
-**TBS Public API Base URL:** [https://testapi.taxbandits.com/v1.7.3/TINMatchingRecipients/Request]
+**TBS Public API Base URL:** [https://testapi.taxbandits.com/{version}/TINMatchingRecipients/Request]
 
 ## List TIN Matching
 For listing TIN Matching Recipients, BusinessId is passed as query parameter  along with Access Token in the header as Bearer Token (Generated using TaxBandits OAuth authentication API).
 After requesting list method in TIN Matching Recipients, the reponse is shown as a table.
 
-**TBS Public API Base URL:** [https://testapi.taxbandits.com/v1.7.3/TINMatchingRecipients/List]
+**TBS Public API Base URL:** [https://testapi.taxbandits.com/{version}/TINMatchingRecipients/List]
 ## TIN Matching Status
 For displaying TIN Matching Recipients Status, pass the SubmissionId and RecordId as query along with Access Token in the header as Bearer Token (Generated using TaxBandits OAuth authentication API). 
 After requesting status method in TIN Matching Recipients API, the response will be shown in a modal.
 
-**TBS Public API Base URL:** [https://testapi.taxbandits.com/v1.7.3/TINMatchingRecipients/Status]
+**TBS Public API Base URL:** [https://testapi.taxbandits.com/{version}/TINMatchingRecipients/Status]
 
 ## Cancel TIN Matching 
 For canceling TIN Matching Recipients, pass the SubmissionId and RecordId as query along with Access Token in the header as Bearer Token (Generated using TaxBandits OAuth authentication API). Cancel method in TIN Matching Recipient API shows success response only if requested TIN Matching Recipient Status is in ORDER CREATED else it will show error response. By passing these values we request to TBS Public API Base URL. 
 After requesting status method in TIN Matching Recipients API, the response will be shown in a modal.
 
-**TBS Public API Base URL:** [https://testapi.taxbandits.com/v1.7.3/TINMatchingRecipients/CancelRequest]
+**TBS Public API Base URL:** [https://testapi.taxbandits.com/{version}/TINMatchingRecipients/CancelRequest]
 
+In the above URLs, `{version}` is the endpoint version of TaxBandits API. 
 
-For more information, please refer: https://developer.taxbandits.com/
+For more information, please refer:[https://developer.taxbandits.com/](https://developer.taxbandits.com/)

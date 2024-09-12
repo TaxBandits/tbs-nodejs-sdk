@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios' //Axios to make HTTP calls
-import { FaEdit} from 'react-icons/fa' // Importing Edit Icon from react icons
+import { FaEdit } from 'react-icons/fa' // Importing Edit Icon from react icons
 import logo from '../images/tbsLogo.png' // Importing images
 import Spinner from '../components/Spinner' // Importing Spinner component for loader
 
@@ -39,8 +39,10 @@ const ListBusinesses = () => {
           setNoListFound(false)
           setBusinessList(listBusinessResponse?.data?.Businesses)
         }
+        console.log('listBusinessResponse?.data',listBusinessResponse?.data)
         setLoading(false)
       } catch (e) {
+        console.log('e',e?.response?.data)
         setBusinessList([])
         setNoListFound(true)
         setLoading(false)
@@ -49,7 +51,7 @@ const ListBusinesses = () => {
 
   return (
     <>
-      <div className="header text-center mt-3 mb-3">
+      <div className="header text-center mb-3">
         <img src={logo} alt="tbsLogo" />
       </div>
 
@@ -71,15 +73,22 @@ const ListBusinesses = () => {
       }
 
       <div className="container">
-        <div className="header text-center mb-3">
+        <div className="text-center mb-3">
           {/*Checks business list length and displays list business*/}
           {businessList.length > 0 && (
             <div className="response-table p-5">
+               <div className='d-flex align-items-center justify-content-between'>
+                          <div>
+                            <h1 className='head-1'>Businesses</h1>
+                            <div className="heading-bottom-line position-relative pb-0  mb-3"></div>
+                          </div>
+                          <button className='btn btn_primary btn_md float-right' onClick={navigateToCreate}>Create Business</button>
+                        </div>
               <table className="table table-striped mt-2 table-bordered">
                 <thead>
                   <tr>
                     <th>BusinessId</th>
-                    <th>BusinessName</th>
+                    <th>Business Name</th>
                     <th>Email</th>
                     <th>Actions</th>
                   </tr>
@@ -88,16 +97,18 @@ const ListBusinesses = () => {
                   {businessList.map((businessDetail, i) => {
                     return (
                       <tr key={i}>
-                        <td>{businessDetail?.BusinessId}</td>
-                        <td className='taL'>{businessDetail?.BusinessNm}</td>
-                        <td className='taL'>{businessDetail?.Email}</td>
-                        <td className='text-center'><Link className='icon-black' to={`/update/${businessDetail?.BusinessId}`}><FaEdit /></Link></td>
+                        <td className='text-start'>{businessDetail?.BusinessId}</td>
+                        <td className='text-start'>{businessDetail?.BusinessNm == null ? businessDetail?.FirstNm : businessDetail?.BusinessNm }</td>
+                        <td className='text-start'>{businessDetail?.Email}</td>
+                        <td className='text-center'><Link className='btn btn-primary status-btn btn_smm' to={`/update/${businessDetail?.BusinessId}`}><FaEdit /></Link></td>
                       </tr>
                     )
                   })}
                 </tbody>
               </table>
-              <button className='btn btn_cancel mb-3' onClick={navigateToHome}>Back</button>
+              <div className='text-start'>
+              <button className='btn_back mb-3' onClick={navigateToHome}>Back</button>
+              </div>
             </div>
           )}
         </div>

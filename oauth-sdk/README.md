@@ -12,7 +12,7 @@ In this SDK, we demonstrate how to generate **JWT** (JSON Web Token) by generati
 
 ## Dependencies Used
 ### Runtime dependencies
-#### Node JS(v20.10.0) Application
+#### Node JS Application
  - **express** - The application framework for building RESTful APIs with Node.js.
  - **dotenv** - It is used to load environment variables.
  - **axios** - This library is used to make HTTP Calls.

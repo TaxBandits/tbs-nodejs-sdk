@@ -5,7 +5,7 @@ In this SDK, we demonstrate how to create business, list business and update bus
 
  - Clone the project into your local machine by entering following command in Terminal/Command Prompt.
     ```bash
-    git clone https://github.com/TaxBandits/tbs-nodejs-sdk.git
+    	https://github.com/TaxBandits/tbs-nodejs-sdk.git
     ```
  - Let's Navigate into the business-sdk folder.
  - Open the frontend and backend folder path in a separate integrated terminals, so we can run our frontend and backend in two different ports.
@@ -90,18 +90,36 @@ In this SDK, we demonstrate how to create business, list business and update bus
 ## Create Business
 For creating business, pass the required data from React Js Application (Frontend) to the Node Js Application(Backend). In Backend, JWT will be generated and passed to the TBS Create Business Endpoint in headers as Authorization. By requesting the TBS Create Business Endpoint, the business will be created and output will be shown in a modal.
 
-**TBS Public API Base URL:** [https://testapi.taxbandits.com/v1.7.1/Business/Create]
+**TBS Public API Base URL:** [https://testapi.taxbandits.com/{version}/Business/Create]
 
 ## List Business
 For listing business we are passing page, page size, FromDate as params which is taken from env files and ToDate is taken as current date which is also passed as params and JWT token as headers. By passing these values we request to TBS Public API Base URL.
 After requesting list method in business API we'll display the response data as a list.
 
-**TBS Public API Base URL:** [https://testapi.taxbandits.com/v1.7.1/Business/List]
+**TBS Public API Base URL:** [https://testapi.taxbandits.com/{version}/Business/List]
 
+- If there is no business under the User, it shows the response from the list method in Business TBS Public API Base URL.
+    #### Sample No Business found
+    ![No Business found]
+    ```json
+    {
+    "StatusCode": 404,
+    "StatusName": "NotFound",
+    "StatusMessage": "The resource you have specified cannot be found",
+    "Businesses": null,
+    "Page": 1,
+    "TotalRecords": 0,
+    "TotalPages": 0,
+    "PageSize": 10,
+    "Errors": null
+    }
+ 
 ## Update Business
 For updating business we are requesting get business method from Business API and fetch the data against Business ID which is passed as params. After retrieving data we'll update it by requesting TBS Public API Base URL.
 After requesting update method in business API, output will be shown in a modal.
 
-**TBS Public API Base URL:** [https://testapi.taxbandits.com/v1.7.1/Business/Update]
+**TBS Public API Base URL:** [https://testapi.taxbandits.com/{version}/Business/Update]
 
-For more information, please refer: https://developer.taxbandits.com/
+In the above URLs, `{version}` is the endpoint version of TaxBandits API.
+
+For more information, please refer: [https://developer.taxbandits.com/](https://developer.taxbandits.com/)

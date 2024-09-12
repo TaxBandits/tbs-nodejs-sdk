@@ -29,7 +29,7 @@ Visit https://developer.taxbandits.com/docs/Overview to view the full documentat
 
 ## FAQ
 
-See the [Frequently Asked Questions page](https://developer.taxbandits.com/docs/Faq/General) in the official documentation.
+See the [Frequently Asked Questions page](https://developer.taxbandits.com/docs/FAQ) in the official documentation.
 
 ## Developer Terms
 

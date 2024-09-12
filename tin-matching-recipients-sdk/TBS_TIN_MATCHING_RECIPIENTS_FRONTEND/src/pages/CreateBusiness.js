@@ -319,7 +319,7 @@ const CreateBusiness = () => {
 
     return (
         <>
-            <div className="header text-center mt-3 mb-3">
+            <div className="header text-center mb-3">
                 <img src={logo} alt="tbsLogo" />
             </div>
             

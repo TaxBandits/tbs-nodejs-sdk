@@ -5,7 +5,7 @@ import axios from 'axios' // Importing Axios to make HTTP calls.
 import * as bootstrap from 'bootstrap/dist/js/bootstrap' // Importing bootstrap for bootstrap modal
 import logo from '../images/tbsLogo.png' // Importing Images
 import Spinner from '../components/Spinner' // Importing spinner for loader
-import { countries, states, statesShort, countryShorts, businessType, businessTypeShorts, EstateBusinessMembers, PartnershipBusinessMembers, SoleProprietorshipBusinessMembers, ExemptOrganizationBusinessMembers, CorporationBusinessMembers, kindOfEmployer, kindOfPayer } from '../utils/constants' // Importing static values from utils
+import { countries, states, suffix, statesShort, countryShorts, businessType, businessTypeShorts, EstateBusinessMembers, PartnershipBusinessMembers, SoleProprietorshipBusinessMembers, ExemptOrganizationBusinessMembers, CorporationBusinessMembers, kindOfEmployer, kindOfPayer } from '../utils/constants' // Importing static values from utils
 import BusinessErrorModal from '../components/BusinessErrorModal' // Importing Error Modal
 import BusinessSuccessModal from '../components/BusinessSuccessModal' // Importing Success Modal
 
@@ -27,6 +27,10 @@ const CreateBusiness = () => {
     // Defining state for create business details
     const [businessDetails, setBusinessDetails] = useState({
         BusinessName: "",
+        FirstNm:"",
+        MiddleNm:"",
+        LastNm:"",
+        Suffix:"",
         PayerRef: "",
         TradeName: "",
         EINOrSSN: "",
@@ -107,6 +111,17 @@ const CreateBusiness = () => {
         })
     }
 
+    // Storing key values of suffix into new array for Dropdown
+    const suffixOptions = []
+    for (const key in suffix) {
+        suffixOptions.push({
+            value: suffix[key],
+            label: suffix[key],
+            key: key,
+        })
+    }
+
+
     // To create business by passing input data from state to create business API
     const handleCreateBusinessSubmit = async (e) => {
         try {
@@ -114,6 +129,10 @@ const CreateBusiness = () => {
             setLoading(true)
             const requestData = {
                 BusinessNm: businessDetails?.BusinessName,
+                FirstNm:businessDetails?.FirstNm,
+                MiddleNm:businessDetails?.MiddleNm,
+                LastNm:businessDetails?.LastNm,
+                Suffix:businessDetails?.Suffix,
                 PayerRef: businessDetails?.PayerRef,
                 TradeNm: businessDetails?.TradeName,
                 EINorSSN: businessDetails?.EINOrSSN,
@@ -152,10 +171,13 @@ const CreateBusiness = () => {
 
             const createBusinessResponse = await axios.post(`${process.env.REACT_APP_TBS_BACKEND_URL}/Business/Create`, requestData)
 
-            //When 200 from the Create Business
             if (createBusinessResponse?.data?.StatusCode === 200) {
                 setBusinessDetails({
                     BusinessName: "",
+                    FirstNm:"",
+                    MiddleNm:"",
+                    LastNm:"",
+                    Suffix:"",
                     PayerRef: "",
                     TradeName: "",
                     EINOrSSN: "",
@@ -182,12 +204,11 @@ const CreateBusiness = () => {
                     PostalCode: "",
                     Country: "",
                 })
-
                 setSuccessData(createBusinessResponse?.data)
 
-                //Modal to show the Success or Failure Response from the Business/Create Endpoint.
-                let businessSuccessModal = new bootstrap.Modal(document.getElementById('successModal'))
-                businessSuccessModal.show()
+                 //Modal to show the Success or Failure Response from the Business/Create Endpoint.
+                 let businessSuccessModal = new bootstrap.Modal(document.getElementById('successModal'))
+                 businessSuccessModal.show()
             }
         } catch (e) {
             if (e?.response?.data?.StatusMessage === "Validation error has occurred") {
@@ -322,14 +343,12 @@ const CreateBusiness = () => {
             <div className="header text-center mt-3 mb-3">
                 <img src={logo} alt="tbsLogo" />
             </div>
-            
             {/*Checks loader state and displays spinner component*/}
-            {loading  &&
+            {loading &&
                 <div className='mt-3'>
                     <Spinner />
                 </div>
             }
-
             <div className="container">
                 <div className="w-75 m-auto">
                     <div className="border-1 border rounded-2 pb-4">
@@ -339,7 +358,7 @@ const CreateBusiness = () => {
                             <div className="row d-flex justify-content-center mb-15px">
                                 <div className="col-md-5">
                                     <div className="labelName">
-                                        <label className="control-label"><span className="text-danger">*</span>Business Name:</label>
+                                        <label className="control-label"><span className="text-danger"></span>Business Name:</label>
                                         <input type="text" className='form-control' name='BusinessName' value={businessDetails?.BusinessName} onChange={(e) => { handleChangeValidation(e) }} />
                                     </div>
                                 </div>
@@ -347,6 +366,40 @@ const CreateBusiness = () => {
                                     <div className="labelName">
                                         <label className="control-label"><span className="text-danger"></span>Payer Ref:</label>
                                         <input type="text" className='form-control' name='PayerRef' value={businessDetails?.PayerRef} onChange={(e) => { handleChangeValidation(e) }} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row d-flex justify-content-center mb-15px">
+                                <div className="col-md-5">
+                                    <div className="labelName">
+                                        <label className="control-label"><span className="text-danger"></span>First Name:</label>
+                                        <input type="text" className='form-control' name='FirstNm' value={businessDetails?.FirstNm} onChange={(e) => { handleChangeValidation(e) }} />
+                                    </div>
+                                </div>
+                                <div className="col-md-5">
+                                    <div className="labelName">
+                                        <label className="control-label"><span className="text-danger"></span> Middle Name:</label>
+                                        <input type="text" className='form-control' name='MiddleNm' value={businessDetails?.MiddleNm} onChange={(e) => { handleChangeValidation(e) }} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row d-flex justify-content-center mb-15px">
+                                <div className="col-md-5">
+                                    <div className="labelName">
+                                        <label className="control-label"><span className="text-danger"></span>Last Name:</label>
+                                        <input type="text" className='form-control' name='LastNm' value={businessDetails?.LastNm} onChange={(e) => { handleChangeValidation(e) }} />
+                                    </div>
+                                </div>
+                                <div className="col-md-5">
+                                    <div className="labelName">
+                                        <label className="control-label"><span className="text-danger"></span>Suffix:</label>
+                                        <select className='form-control form-select' name='Suffix' value={businessDetails?.Suffix} onChange={(e) => { handleChangeValidation(e) }}  >
+                                        {suffixOptions?.map((suffixOption, index) => {
+                                          return <option key={suffixOption.key} selected={suffixOption.value == businessDetails.Suffix ? `selected` : ``} value={suffixOption.label}>
+                                            {suffixOption?.label}
+                                          </option>
+                                        })}
+                                       </select>
                                     </div>
                                 </div>
                             </div>
@@ -361,7 +414,7 @@ const CreateBusiness = () => {
                                 </div>
                                 <div className="col-md-5">
                                     <div className="labelName">
-                                        <label className="control-label"><span className="text-danger">*</span>EIN or SSN:</label>
+                                        <label className="control-label"><span className="text-danger"></span>EIN or SSN:</label>
                                         <span className='m-3'><input className="form-check-input cursor-pointer" type="checkbox" name='IsEIN' value={businessDetails?.IsEIN} onClick={(e) => { handleChangeValidation(e) }} checked={businessDetails?.IsEIN} /> Is EIN?</span>
                                         <input type="text" className='form-control' name='EINOrSSN' value={businessDetails?.EINOrSSN} maxLength="9" onChange={(e) => { handleChangeValidation(e) }} />
                                     </div>
@@ -371,7 +424,7 @@ const CreateBusiness = () => {
                             <div className="row d-flex justify-content-center mb-15px">
                                 <div className="col-md-5">
                                     <div className="labelName">
-                                        <label className="control-label"><span className="text-danger">*</span>Email Address:</label>
+                                        <label className="control-label"><span className="text-danger"></span>Email Address:</label>
                                         <input type="text" className='form-control' name='EmailAddress' value={businessDetails?.EmailAddress} onChange={(e) => { handleChangeValidation(e) }} />
 
                                     </div>
@@ -387,7 +440,7 @@ const CreateBusiness = () => {
                             <div className="row d-flex justify-content-center mb-15px">
                                 <div className="col-md-5">
                                     <div className="labelName">
-                                        <label className="control-label"><span className="text-danger">*</span>Phone:</label>
+                                        <label className="control-label"><span className="text-danger"></span>Phone:</label>
                                         <input type="text" className='form-control' name='Phone' value={businessDetails?.Phone} v maxLength="10" onChange={(e) => { handleChangeValidation(e) }} />
 
                                     </div>
@@ -410,7 +463,7 @@ const CreateBusiness = () => {
                                 </div>
                                 <div className="col-md-5">
                                     <div className="labelName">
-                                        <label className="control-label"><span className="text-danger">*</span>Business Type:</label>
+                                        <label className="control-label"><span className="text-danger"></span>Business Type:</label>
                                         <select className="form-control form-select" name='BusinessType' onChange={(e) => { handleChangeValidation(e) }} >
                                             {businessTypeOptions?.map((businessTypeOption, index) => {
                                                 return <option key={index} selected={businessTypeOption?.code === businessDetails?.BusinessType ? `selected` : ``} value={businessTypeOption?.code}>
@@ -433,6 +486,7 @@ const CreateBusiness = () => {
                                                 </option>
                                             })}
                                         </select>
+
                                     </div>
                                 </div>
                                 <div className="col-md-5">
@@ -448,6 +502,7 @@ const CreateBusiness = () => {
                                     <div className="labelName">
                                         <label className="control-label"><span className="text-danger"></span>Signing Authority Phone:</label>
                                         <input type="text" className='form-control' name='SigningAuthorityPhone' maxLength="10" value={businessDetails?.SigningAuthorityPhone} onChange={(e) => { handleChangeValidation(e) }} />
+
                                     </div>
                                 </div>
                                 <div className="col-md-5">
@@ -476,15 +531,17 @@ const CreateBusiness = () => {
                                                 </option>
                                             })}
                                         </select>
+
                                     </div>
                                 </div>
                                 <div className="col-md-5">
                                     <span><input className="form-check-input cursor-pointer" type="checkbox" name='IsForeign' style={{ marginLeft: "10px" }} onClick={(e) => { handleChangeValidation(e) }} checked={businessDetails?.IsForeign} /> Is Foreign?</span>
                                     <div className="labelName">
-                                        <label className="control-label"><span className="text-danger">*</span>Address 1:</label>
+                                        <label className="control-label"><span className="text-danger"></span>Address 1:</label>
                                         <input type="text" className='form-control' name='Address1' value={businessDetails?.Address1} onChange={(e) => { handleChangeValidation(e) }} />
                                     </div>
                                 </div>
+
                             </div>
 
                             <div className="row d-flex justify-content-center mb-15px">
@@ -496,7 +553,7 @@ const CreateBusiness = () => {
                                 </div>
                                 <div className="col-md-5">
                                     <div className="labelName">
-                                        <label className="control-label"><span className="text-danger">*</span>City:</label>
+                                        <label className="control-label"><span className="text-danger"></span>City:</label>
                                         <input type="text" className='form-control' name='City' value={businessDetails?.City} onChange={(e) => { handleChangeValidation(e) }} />
                                     </div>
                                 </div>
@@ -507,7 +564,7 @@ const CreateBusiness = () => {
                                     <div className="row d-flex justify-content-center mb-15px">
                                         <div className="col-md-5">
                                             <div className="labelName">
-                                                <label className="control-label"><span className="text-danger">*</span>Country:</label>
+                                                <label className="control-label"><span className="text-danger"></span>Country:</label>
                                                 <select className="form-control form-select" name='Country' onChange={(e) => { handleChangeValidation(e) }} >
                                                     {countriesOptions?.map((countryOption, index) => {
                                                         return <option key={index} selected={countryOption?.code === businessDetails?.Country ? `selected` : ``} value={countryOption?.code}>
@@ -519,7 +576,7 @@ const CreateBusiness = () => {
                                         </div>
                                         <div className="col-md-5">
                                             <div className="labelName">
-                                                <label className="control-label"><span className="text-danger">*</span>ProvinceOrStateNm:</label>
+                                                <label className="control-label"><span className="text-danger"></span>ProvinceOrStateNm:</label>
                                                 <input type="text" className='form-control' name='ProvinceOrStateNm' value={businessDetails?.ProvinceOrStateNm} onChange={(e) => { handleChangeValidation(e) }} />
                                             </div>
                                         </div>
@@ -527,7 +584,7 @@ const CreateBusiness = () => {
                                     <div className="row d-flex justify-content-center mb-15px">
                                         <div className="col-md-5">
                                             <div className="labelName">
-                                                <label className="control-label"><span className="text-danger">*</span>Postal Code:</label>
+                                                <label className="control-label"><span className="text-danger"></span>Postal Code:</label>
                                                 <input type="text" className='form-control' name='PostalCode' value={businessDetails?.PostalCode} onChange={(e) => { handleChangeValidation(e) }} />
                                             </div>
                                         </div>
@@ -539,7 +596,7 @@ const CreateBusiness = () => {
                                     <div className="row d-flex justify-content-center mb-15px">
                                         <div className="col-md-5">
                                             <div className="labelName">
-                                                <label className="control-label"><span className="text-danger">*</span>State:</label>
+                                                <label className="control-label"><span className="text-danger"></span>State:</label>
                                                 <select className="form-control form-select" name='State' onChange={(e) => { handleChangeValidation(e) }} >
                                                     {statesOptions?.map((stateOption, index) => {
                                                         return <option key={index} selected={stateOption?.code === businessDetails?.State ? `selected` : ``} value={stateOption?.code}>
@@ -551,7 +608,7 @@ const CreateBusiness = () => {
                                         </div>
                                         <div className="col-md-5">
                                             <div className="labelName">
-                                                <label className="control-label"><span className="text-danger">*</span>Zip Code:</label>
+                                                <label className="control-label"><span className="text-danger"></span>Zip Code:</label>
                                                 <input type="text" className='form-control' name='ZipCode' value={businessDetails?.ZipCode} onChange={(e) => { handleChangeValidation(e) }} />
                                             </div>
                                         </div>

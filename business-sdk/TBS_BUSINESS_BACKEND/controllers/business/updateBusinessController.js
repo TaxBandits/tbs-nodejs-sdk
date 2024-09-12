@@ -6,7 +6,7 @@ const { publicAPIAuthentication } = require('../user/userController') /*Importin
 const updateBusiness = async (req, res) => {
 
     const requestBody = req?.body
-    
+
     //Getting JWT token by using oauth api function
     const JWTAccessToken = await publicAPIAuthentication()
 
@@ -18,11 +18,11 @@ const updateBusiness = async (req, res) => {
     }
 
     try {
-            //TBS PUBLIC API to Update business
-            const updateBusinessResponse = await axios.put(`${process.env.TBS_PUBLIC_API_BASE_URL}/Business/Update`, requestBody, config)
+        //TBS PUBLIC API to Update business
+        const updateBusinessResponse = await axios.put(`${process.env.TBS_PUBLIC_API_BASE_URL}/Business/Update`, requestBody, config)
 
-            res.status(200).send(updateBusinessResponse?.data)
-    } catch(e) {
+        res.status(200).send(updateBusinessResponse?.data)
+    } catch (e) {
         res.status(400).send(e?.response?.data)
     }
 }

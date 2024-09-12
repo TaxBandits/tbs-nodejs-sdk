@@ -161,6 +161,6 @@ After requesting requestPdfUrl method in Form1099NEC API, the response pdf urls 
 
 **TBS Public API Base URL:** [https://testapi.taxbandits.com/{version}/Form1099NEC/RequestPdfURLs]
 
- In the above URLs, `{version}` is the endpoint version of TaxBandits API. Likely v1.6.1, v1.7.0, v1.7.1, v1.7.3.
+ In the above URLs, `{version}` is the endpoint version of TaxBandits API. Likely v1.7.0, v1.7.1, v1.7.3.
  
 For more information, please refer:[Developer.taxbandits.com](https://developer.taxbandits.com/)

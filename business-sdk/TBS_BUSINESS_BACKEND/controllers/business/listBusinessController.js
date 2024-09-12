@@ -8,7 +8,7 @@ const listBusiness = async (req, res) => {
     const PageSize = process.env.PAGE_SIZE
     const FromDate = process.env.FROM_DATE
     const ToDate = moment(new Date()).format('MM/DD/YYYY')
-    
+
     //Getting JWT token by using oauth api function
     const JWTAccessToken = await publicAPIAuthentication()
 

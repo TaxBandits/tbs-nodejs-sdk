@@ -1,5 +1,6 @@
 import './styles/css/Site.css' // Importing bootstrap files
 import './styles/css/bootstrap.min.css' // Importing bootstrap files
+import './styles/css/icons-mdi/css/materialdesignicons.min.css' // Importing material design icon files
 import {
   BrowserRouter as Router,
   Routes,

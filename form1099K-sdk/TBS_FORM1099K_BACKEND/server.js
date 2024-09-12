@@ -8,6 +8,7 @@ app.use(cors())
 
 app.use(express.json()); /* Parse the incoming requests with JSON payloads */
 
+
 app.use('/Business', require('./routes/business/businessRoute')) // Business/Create Routes
 app.use('/Form1099K',require('./routes/form1099K/form1099Kroute'))  /*Form 1099-K Routes*/ 
 

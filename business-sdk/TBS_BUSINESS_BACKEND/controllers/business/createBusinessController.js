@@ -9,7 +9,7 @@ const createBusiness = async (req, res) => {
 
     //Getting JWT token by using oauth api function
     const JWTAccessToken = await publicAPIAuthentication()
-    console.log("token-->",JWTAccessToken)
+    console.log("token-->", JWTAccessToken)
     //Defining headers 
     const config = {
         headers: {
@@ -17,12 +17,12 @@ const createBusiness = async (req, res) => {
         }
     }
 
-    try{
-            //TBS PUBLIC API to create business
-            const createBusinessResponse = await axios.post(`${process.env.TBS_PUBLIC_API_BASE_URL}/Business/Create`, requestBody, config)
+    try {
+        //TBS PUBLIC API to create business
+        const createBusinessResponse = await axios.post(`${process.env.TBS_PUBLIC_API_BASE_URL}/Business/Create`, requestBody, config)
 
-            res.status(200).send(createBusinessResponse?.data)
-    }catch(e){
+        res.status(200).send(createBusinessResponse?.data)
+    } catch (e) {
         res.status(400).send(e?.response?.data)
     }
 }

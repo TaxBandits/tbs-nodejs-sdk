@@ -78,6 +78,56 @@ const SuccessModal = ({ successData, businessData, status }) => {
                       </tbody>
                     </table>
                   </div>
+                  {successData?.Form1099Records?.SuccessRecords[0]?.OnlineAccess?.Status==="NOT_CREATED" &&
+                     <div className="table-container mb-3">
+                       <h2 className="tabel-sub-head">Online Access Response: (Warning)</h2>
+                     <table>
+                       <tbody>
+                         <tr className="fw-600 ">
+                           <th className="text-center fw-600" width="30%">Status</th>
+                           <th className="text-center" width="35%">Email</th>
+                           <th className="text-center" width="35%">Info</th>
+                         </tr>
+                         <tr>
+                           <td className="taL text-center">
+                             {successData?.Form1099Records?.SuccessRecords[0]?.OnlineAccess?.Status}
+                           </td>
+                           <td className="taL text-center">
+                             {successData?.Form1099Records?.SuccessRecords[0]?.OnlineAccess?.Email}
+                           </td>
+                           <td className="taL text-center">
+                             {successData?.Form1099Records?.SuccessRecords[0]?.OnlineAccess?.Info}
+                           </td>
+                         </tr>
+                       </tbody>
+                     </table>
+                   </div>
+                  }
+                  {successData?.Form1099Records?.SuccessRecords[0]?.Postal?.Status==="NOTCREATED" &&
+                     <div className="table-container mb-3">
+                       <h2 className="tabel-sub-head">Postal Response: (Warning)</h2>
+                     <table>
+                       <tbody>
+                         <tr className="fw-600 ">
+                           <th className="text-center fw-600" width="30%">Status</th>
+                           <th className="text-center" width="35%">StatusTs</th>
+                           <th className="text-center" width="35%">Info</th>
+                         </tr>
+                         <tr>
+                           <td className="taL text-center">
+                             {successData?.Form1099Records?.SuccessRecords[0]?.Postal?.Status}
+                           </td>
+                           <td className="taL text-center">
+                             {successData?.Form1099Records?.SuccessRecords[0]?.Postal?.StatusTs=== null ? "---" :successData?.Form1099Records?.SuccessRecords[0]?.Postal?.StatusTs}
+                           </td>
+                           <td className="taL text-center">
+                             {successData?.Form1099Records?.SuccessRecords[0]?.Postal?.Info}
+                           </td>
+                         </tr>
+                       </tbody>
+                     </table>
+                   </div>
+                  }
                 </> :
                 <>
                   <div class="table-container mt-2 mb-4">
