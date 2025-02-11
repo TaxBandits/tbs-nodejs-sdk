@@ -98,12 +98,12 @@ const ListBusinesses = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {businessList.map((businessDetail, i) => {
+                            {businessList?.map((businessDetail, i) => {
                               return (
                                 <tr key={i}>
                                   <td className='taL'>{businessDetail?.BusinessId}</td>
                                   <td className='taL'>{businessDetail?.BusinessNm == null ? businessDetail?.FirstNm :businessDetail?.BusinessNm }</td>
-                                  <td className='taL'>{businessDetail?.Email === "" ? <span>-</span> : businessDetail?.Email}</td>
+                                  <td className='taL'>{businessDetail?.Email === "" || businessDetail?.Email === null ? <span>-</span> : businessDetail?.Email}</td>
                                   <td className='text-center d-flex flex-row justify-content-center'>
                                     <Link className='btn btn-primary status-btn btn_smm me-2' to={`/createForm1099NEC/${businessDetail?.BusinessId}`}>Create NEC</Link>
                                     <Link className='btn btn-primary status-btn btn_smm me-2' to={`/listForm1099NEC/${businessDetail?.BusinessId}/${businessDetail?.BusinessNm}`}>List NECs</Link>
