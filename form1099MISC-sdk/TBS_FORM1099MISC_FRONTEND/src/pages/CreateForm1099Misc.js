@@ -338,45 +338,8 @@ const CreateForm1099misc = () => {
                 },
                 ReturnHeader: {
                     Business: {
-                        BusinessNm: createBusiness?.BusinessName,
-                        FirstNm :createBusiness?.FirstNm,
-                        LastNm :createBusiness?.LastNm,
-                        MiddleNm :createBusiness?.MiddleNm,
-                        Suffix :createBusiness?.Suffix,
-                        PayerRef: createBusiness?.PayerRef,
-                        TradeNm: createBusiness?.TradeName,
-                        EINorSSN: createBusiness?.EINOrSSN,
-                        IsEIN: createBusiness?.IsEIN,
-                        Email: createBusiness?.EmailAddress,
-                        ContactNm: createBusiness?.ContactName,
-                        Phone: createBusiness?.Phone,
-                        PhoneExtn: createBusiness?.PhoneExtn,
-                        BusinessType: createBusiness?.BusinessType,
-                        SigningAuthority: {
-                            Name: createBusiness?.SigningAuthorityName,
-                            Phone: createBusiness?.SigningAuthorityPhone,
-                            BusinessMemberType: createBusiness?.BusinessMemberType,
-                        },
-                        KindOfEmployer: createBusiness?.KindOfEmployer,
-                        KindOfPayer: createBusiness?.KindOfPayer,
-                        IsBusinessTerminated: createBusiness?.IsBusinessTerminated,
-                        IsForeign: createBusiness?.IsForeign,
-                        USAddress: {
-                            Address1: !createBusiness.IsForeign ? createBusiness?.Address1 : "",
-                            Address2: !createBusiness.IsForeign ? createBusiness?.Address2 : "",
-                            City: !createBusiness.IsForeign ? createBusiness?.City : "",
-                            State: !createBusiness.IsForeign ? createBusiness?.State : "",
-                            ZipCd: !createBusiness.IsForeign ? createBusiness?.ZipCode : "",
-                        },
-                        ForeignAddress: {
-                            Address1: createBusiness.IsForeign ? createBusiness?.Address1 : "",
-                            Address2: createBusiness.IsForeign ? createBusiness?.Address2 : "",
-                            City: createBusiness.IsForeign ? createBusiness?.City : "",
-                            ProvinceOrStateNm: createBusiness.IsForeign ? createBusiness?.ProvinceOrStateNm : "",
-                            Country: createBusiness.IsForeign ? createBusiness?.Country : "",
-                            PostalCd: createBusiness.IsForeign ? createBusiness?.PostalCode : "",
-                        }
-                    }
+                        BusinessId:businessId
+                       }
                 },
                 ReturnData: [{
                     SequenceId: recipientInformation?.SequenceId,
@@ -575,45 +538,8 @@ const CreateForm1099misc = () => {
                 },
                 ReturnHeader: {
                     Business: {
-                        BusinessNm: createBusiness?.BusinessName,
-                        FirstNm:createBusiness?.FirstNm,
-                        LastNm:createBusiness?.LastNm,
-                        MiddleNm:createBusiness?.MiddleNm,
-                        Suffix:createBusiness?.Suffix,
-                        PayerRef: createBusiness?.PayerRef,
-                        TradeNm: createBusiness?.TradeName,
-                        EINorSSN: createBusiness?.EINOrSSN,
-                        IsEIN: createBusiness?.IsEIN,
-                        Email: createBusiness?.EmailAddress,
-                        ContactNm: createBusiness?.ContactName,
-                        Phone: createBusiness?.Phone,
-                        PhoneExtn: createBusiness?.PhoneExtn,
-                        BusinessType: createBusiness?.BusinessType,
-                        SigningAuthority: {
-                            Name: createBusiness?.SigningAuthorityName,
-                            Phone: createBusiness?.SigningAuthorityPhone,
-                            BusinessMemberType: createBusiness?.BusinessMemberType,
-                        },
-                        KindOfEmployer: createBusiness?.KindOfEmployer,
-                        KindOfPayer: createBusiness?.KindOfPayer,
-                        IsBusinessTerminated: createBusiness?.IsBusinessTerminated,
-                        IsForeign: createBusiness?.IsForeign,
-                        USAddress: {
-                            Address1: !createBusiness.IsForeign ? createBusiness?.Address1 : "",
-                            Address2: !createBusiness.IsForeign ? createBusiness?.Address2 : "",
-                            City: !createBusiness.IsForeign ? createBusiness?.City : "",
-                            State: !createBusiness.IsForeign ? createBusiness?.State : "",
-                            ZipCd: !createBusiness.IsForeign ? createBusiness?.ZipCode : "",
-                        },
-                        ForeignAddress: {
-                            Address1: createBusiness.IsForeign ? createBusiness?.Address1 : "",
-                            Address2: createBusiness.IsForeign ? createBusiness?.Address2 : "",
-                            City: createBusiness.IsForeign ? createBusiness?.City : "",
-                            ProvinceOrStateNm: createBusiness.IsForeign ? createBusiness?.ProvinceOrStateNm : "",
-                            Country: createBusiness.IsForeign ? createBusiness?.Country : "",
-                            PostalCd: createBusiness.IsForeign ? createBusiness?.PostalCd : "",
-                        }
-                    }
+                        BusinessId:businessId
+                       }
                 },
                 ReturnData: [{
                     IsOnlineAccess:recipientInformation?.IsOnlineAccess,

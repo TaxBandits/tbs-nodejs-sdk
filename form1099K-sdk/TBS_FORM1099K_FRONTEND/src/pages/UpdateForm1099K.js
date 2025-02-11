@@ -36,6 +36,7 @@ const UpdateForm1099k = () => {
         TINType: ""
     })
     const [editBusinessDetails, setEditBusinessDetails] = useState({
+        BusinessId:"",
         BusinessName: "",
         FirstNm :"",
         LastNm :"",
@@ -441,44 +442,7 @@ const UpdateForm1099k = () => {
                 },
                 ReturnHeader: {
                     Business: {
-                        BusinessNm: editBusinessDetails?.BusinessName,
-                        FirstNm:editBusinessDetails?.FirstNm,
-                        LastNm:editBusinessDetails?.LastNm,
-                        MiddleNm:editBusinessDetails?.MiddleNm,
-                        Suffix:editBusinessDetails?.Suffix,
-                        PayerRef: editBusinessDetails?.PayerRef,
-                        TradeNm: editBusinessDetails?.TradeName,
-                        EINorSSN: editBusinessDetails?.EINOrSSN,
-                        IsEIN: editBusinessDetails?.IsEIN,
-                        Email: editBusinessDetails?.EmailAddress,
-                        ContactNm: editBusinessDetails?.ContactName,
-                        Phone: editBusinessDetails?.Phone,
-                        PhoneExtn: editBusinessDetails?.PhoneExtn,
-                        BusinessType: editBusinessDetails?.BusinessType,
-                        SigningAuthority: {
-                            Name: editBusinessDetails?.SigningAuthorityName,
-                            Phone: editBusinessDetails?.SigningAuthorityPhone,
-                            BusinessMemberType: editBusinessDetails?.BusinessMemberType,
-                        },
-                        KindOfEmployer: editBusinessDetails?.KindOfEmployer,
-                        KindOfPayer: editBusinessDetails?.KindOfPayer,
-                        IsBusinessTerminated: editBusinessDetails?.IsBusinessTerminated,
-                        IsForeign: editBusinessDetails?.IsForeign,
-                        USAddress: {
-                            Address1: !editBusinessDetails.IsForeign ? editBusinessDetails?.Address1 : "",
-                            Address2: !editBusinessDetails.IsForeign ? editBusinessDetails?.Address2 : "",
-                            City: !editBusinessDetails.IsForeign ? editBusinessDetails?.City : "",
-                            State: !editBusinessDetails.IsForeign ? editBusinessDetails?.State : "",
-                            ZipCd: !editBusinessDetails.IsForeign ? editBusinessDetails?.ZipCode : "",
-                        },
-                        ForeignAddress: {
-                            Address1: editBusinessDetails.IsForeign ? editBusinessDetails?.Address1 : "",
-                            Address2: editBusinessDetails.IsForeign ? editBusinessDetails?.Address2 : "",
-                            City: editBusinessDetails.IsForeign ? editBusinessDetails?.City : "",
-                            ProvinceOrStateNm: editBusinessDetails.IsForeign ? editBusinessDetails?.ProvinceOrStateNm : "",
-                            Country: editBusinessDetails.IsForeign ? editBusinessDetails?.Country : "",
-                            PostalCd: editBusinessDetails.IsForeign ? editBusinessDetails?.PostalCode : "",
-                        }
+                        BusinessId:editBusinessDetails?.BusinessId
                     }
                 },
                 ReturnData: [{
