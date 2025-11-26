@@ -18,7 +18,7 @@ const getBusiness = async (req, res) => {
     try {
         // PUBLIC API GET BUSINESS
         const getBusinessResponse = await axios.get(`${process.env.TBS_PUBLIC_API_BASE_URL}/Business/Get?BusinessId=${BusinessId}`, config)
-
+        
         res.status(200).send(getBusinessResponse?.data)
     } catch (e) {
         res.status(400).send(e)
