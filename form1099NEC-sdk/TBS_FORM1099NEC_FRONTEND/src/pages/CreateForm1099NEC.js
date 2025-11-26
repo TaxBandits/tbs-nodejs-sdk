@@ -1464,9 +1464,9 @@ const CreateForm1099NEC = () => {
                                             /> </> :
                                     <></>
                                 }
-                                <div className='d-flex justify-content-end align-items-center mt-5'>
-                                    <div className=" p-2">
-                                        <button className="btn btn_primary btn_md" onClick={validateForm} >
+                                <div className='d-flex justify-content-end align-items-center mt-4'>
+                                    <div className="">
+                                        <button className="btn btn_primary btn_md me-2" onClick={validateForm} >
                                             Validate Form
                                         </button>
                                     </div>
