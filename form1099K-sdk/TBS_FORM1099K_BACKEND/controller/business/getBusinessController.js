@@ -1,5 +1,6 @@
-const axios = require('axios')
-const { publicAPIAuthentication } = require('../user/userController')
+const axios = require('axios') /*Using axios to consume API service*/
+const { publicAPIAuthentication } = require('../user/userController') /*Importing publicAPIAuthentication from user controller for JWT token */
+
 
 const getBusiness = async (req, res) => {
     // Getting Business Id from request params
@@ -24,6 +25,7 @@ const getBusiness = async (req, res) => {
     }
 }
 
+//Exporting getBusiness
 module.exports = {
     getBusiness
 }
