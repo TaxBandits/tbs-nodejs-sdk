@@ -1,5 +1,5 @@
-const axios = require('axios')
-const { publicAPIAuthentication } = require('../user/userController')
+const axios = require('axios') /*Using axios to consume API service*/
+const { publicAPIAuthentication } = require('../user/userController') /*Importing publicAPIAuthentication from user controller for JWT token */
 
 const listBusiness = async (req, res) => {
     //Default values loaded from .env
@@ -28,6 +28,7 @@ const listBusiness = async (req, res) => {
     }
 }
 
+//Exporting listBusiness
 module.exports = {
     listBusiness
 }
